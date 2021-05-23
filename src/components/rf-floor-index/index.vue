@@ -17,7 +17,7 @@
 			</view>
 			<text v-if="isLink" class="iconfont iconyou"></text>
 		</view>
-		<rf-product-list :bottom="bottom" :list="list.length > 0 ? list : [0, 0]"></rf-product-list>
+		<rf-product-list-coup :bottom="bottom" :list="list.length > 0 ? list : [0, 0]"></rf-product-list-coup>
 	</view>
 </template>
 <script>/**
@@ -27,10 +27,10 @@
  *@date 2020/01/08 11:28:39
  */
 import $mAssetsPath from '@/config/assets.config';
-import rfProductList from '@/components/rf-product-list';
+import rfProductListCoup from '@/components/rf-product-list-coup';
 export default {
 	name: 'rfFloorIndex',
-	components: { rfProductList },
+	components: { rfProductListCoup },
 	props: {
 		// 列表
 		list: {

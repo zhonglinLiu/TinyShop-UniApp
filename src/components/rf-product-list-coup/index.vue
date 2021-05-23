@@ -24,19 +24,16 @@
 							<view class="rf-pro-price">
 								<text class="rf-sale-price" :class="'text-'+themeColor.name">{{ moneySymbol }}{{ item.price }}</text>
 								<text class="rf-factory-price" v-if="item.market_price > item.price">{{ moneySymbol }}{{ item.market_price }}</text>
-							</view>
-							<view class="rf-pro-pay">
-								<text
-									><text :class="'text-'+themeColor.name">{{
+								<text class="saled">已售:<text :class="'text-'+themeColor.name">{{
 										item.total_sales | filterTotalSales
 									}}</text>
-									人购买</text
+									</text
 								>
-								<text
-									@tap.stop="toggleSpec(item)"
-									class="iconfont icongouwuche2"
-									:class="'text-'+themeColor.name"
-								></text>
+							</view>
+							<view class="coupon_price_txt">
+								券￥ {{item.coupon_price}}
+								<view class="coupon_price_txt_r1"></view>
+								<view class="coupon_price_txt_r2"></view>
 							</view>
 						</view>
 					</view>
@@ -68,19 +65,16 @@
 							<view class="rf-pro-price">
 								<text class="rf-sale-price" :class="'text-'+themeColor.name">{{ moneySymbol }}{{ item.price }}</text>
 								<text class="rf-factory-price" v-if="item.market_price > item.price">{{ moneySymbol }}{{ item.market_price }}</text>
-							</view>
-							<view class="rf-pro-pay">
-								<text
-									><text :class="'text-'+themeColor.name">{{
+								<text class="saled">已售:<text :class="'text-'+themeColor.name">{{
 										item.total_sales | filterTotalSales
 									}}</text>
-									人购买</text
+									</text
 								>
-								<text
-									@tap.stop="toggleSpec(item)"
-									:class="'text-'+themeColor.name"
-									class="iconfont icongouwuche2"
-								></text>
+							</view>
+							<view class="coupon_price_txt">
+								券￥ {{item.coupon_price}}
+								<view class="coupon_price_txt_r1"></view>
+								<view class="coupon_price_txt_r2"></view>
 							</view>
 						</view>
 					</view>
@@ -88,23 +82,7 @@
 				<!--商品列表-->
 			</block>
 		</view>
-		<!-- 规格-模态层弹窗 -->
-		<view
-			class="popup spec show"
-			v-if="specClass === 'show'"
-			@touchmove.stop.prevent="stopPrevent"
-			@tap="hideSpec"
-		>
-			<!-- 遮罩层 -->
-			<view class="mask" @tap="hideSpec"></view>
-			<view class="layer" :style="{bottom: bottom ? `${bottom}upx` : 0}" @tap.stop="stopPrevent">
-				<rf-attr-content
-					:product="productDetail"
-					@toggle="toggleSpec"
-					:showBuyBtn="true"
-				></rf-attr-content>
-			</view>
-		</view>
+
 	</view>
 </template>
 <script>
@@ -119,7 +97,7 @@ import rfAttrContent from '@/components/rf-attr-content';
 import $mAssetsPath from '@/config/assets.config';
 import { mapMutations } from 'vuex';
 export default {
-	name: 'rfProductList',
+	name: 'rfProductListCoup',
 	props: {
 		list: {
 			type: Array,
@@ -186,44 +164,6 @@ export default {
 					this.specClass = 'show';
 				});
 		},
-		// 规格弹窗开关
-		toggleSpec(row) {
-			if (parseInt(row.status, 10) === 0) return;
-			if (this.specClass === 'show') {
-				this.specClass = 'hide';
-				if (row.stock === 0) {
-					this.$mHelper.toast('库存不足');
-					return;
-				}
-				if (row.type.toString() === '1') {
-					// 加入购物车
-					this.handleCartItemCreate(row.skuId, row.cartCount);
-				} else if (row.type.toString() === '2') {
-					// 立即购买
-					const list = {};
-					const data = {};
-					data.sku_id = row.skuId;
-					data.num = row.cartCount;
-					if (
-						this.productDetail.point_exchange_type.toString() === '2' ||
-						this.productDetail.point_exchange_type.toString() === '4' ||
-						(this.productDetail.point_exchange_type.toString() === '3' &&
-							this.isPointExchange)
-					) {
-						list.type = 'point_exchange';
-					} else {
-						list.type = 'buy_now';
-					}
-					list.data = JSON.stringify(data);
-					this.navTo(`/pages/order/create/order?data=${JSON.stringify(list)}`);
-				}
-				setTimeout(() => {
-					this.specClass = 'none';
-				}, 250);
-			} else if (this.specClass === 'none') {
-				this.getProductDetail(row);
-			}
-		},
 		stopPrevent() {},
 		hideSpec() {
 			this.specClass = 'hide';
@@ -231,20 +171,25 @@ export default {
 				this.specClass = 'none';
 			}, 250);
 		},
-		// 添加商品至购物车
-		async handleCartItemCreate(skuId, cartCount) {
-			await this.$http
-				.post(`${cartItemCreate}`, {
-					sku_id: skuId,
-					num: cartCount
-				})
-				.then(async () => {
-					await this.$http.get(`${cartItemCount}`).then(async r => {
-						this.setCartNum(r.data);
-					});
-					this.$mHelper.toast('添加购物车成功');
-				});
-		}
 	}
 };
 </script>
+
+<style>
+.coupon_price_txt {
+	width: 60px; height: 20px; color:#fff; font-size: 12px;
+	background-color: red; text-align: center; border-radius: 4px;
+	line-height: 20px; top:3px; position: relative;
+}
+.coupon_price_txt_r1 {
+	position: absolute; width: 10px; height: 10px; top:5px; left:-5px;
+	border-radius: 50%; background-color: #fff;
+}
+.coupon_price_txt_r2 {
+	position: absolute; width: 10px; height: 10px; top:5px; right:-5px;
+	border-radius: 50%; background-color: #fff;
+}
+.saled{
+	font-size:10px;  text-align: center; margin-left:5px; color:#333
+}
+</style>

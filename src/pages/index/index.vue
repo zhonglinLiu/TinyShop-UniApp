@@ -67,7 +67,7 @@
 					</view>
 				</rf-swiper-slide>
 				<!-- 爆款推荐 -->
-				<view class="hot-recommend">
+				<!-- <view class="hot-recommend">
 					<view class="left">
 						<image class="hot-recommend-image" @tap="navTo(hotRecommendList[0].url)" :src="hotRecommendList[0].icon"></image>
 					</view>
@@ -75,55 +75,33 @@
 						<image class="hot-recommend-image" @tap.stop="navTo(hotRecommendList[1].url)" :src="hotRecommendList[1].icon"></image>
 						<image class="hot-recommend-image" @tap.stop="navTo(hotRecommendList[2].url)" :src="hotRecommendList[2].icon"></image>
 					</view>
-				</view>
+				</view> -->
 				<!--新品上市-->
 				<rf-floor-index
 					icon="iconxinpin2"
+					:bannerShow="false"
+					:list="TaoProductList"
+					@toBanner="indexTopToDetailPage"
+					@toList="
+					navTo(`/pages/product/list-simple?plat=taobao`)"
+					:header="{ title: '淘宝', desc: '为你推荐' }"
+					@detail="navToDetailPage"
+					:banner="carouselList.index_new && carouselList.index_new[0]"
+				/>
+
+				<rf-floor-index
+					icon="iconxinpin2"
+					:bannerShow="false"
 					:list="newProductList"
 					@toBanner="indexTopToDetailPage"
 					@toList="
 					navTo(`/pages/product/list?param=${JSON.stringify({ is_new: 1 })}`)
 				"
-					:header="{ title: '新品上市', desc: 'New Products Listed' }"
+					:header="{ title: '拼多多', desc: '领券值降' }"
 					@detail="navToDetailPage"
 					:banner="carouselList.index_new && carouselList.index_new[0]"
 				/>
-				<!--推荐商品-->
-				<rf-floor-index
-					icon="icontuijian21"
-					:list="recommendProductList"
-					:header="{ title: '推荐商品', desc: 'Recommend Product' }"
-					@toBanner="indexTopToDetailPage"
-					@toList="
-					navTo(
-						`/pages/product/list?param=${JSON.stringify({ is_recommend: 1 })}`
-					)
-				"
-					@detail="navToDetailPage"
-					:banner="carouselList.index_recommend && carouselList.index_recommend[0]"
-				/>
-				<!--热门商品-->
-				<rf-floor-index
-					icon="iconremen2"
-					:list="hotProductList"
-					:header="{ title: '热门商品', desc: 'Hot Product' }"
-					@toBanner="indexTopToDetailPage"
-					@toList="
-					navTo(`/pages/product/list?param=${JSON.stringify({ is_hot: 1 })}`)
-				"
-					@detail="navToDetailPage"
-					:banner="carouselList.index_hot && carouselList.index_hot[0]"
-				/>
-				<!--猜您喜欢-->
-				<rf-floor-index
-					v-if="guessYouLikeProductList.length > 0"
-					icon="iconcainixihuan2"
-					:list="guessYouLikeProductList"
-					:isLink="false"
-					:header="{ title: '猜您喜欢', desc: 'Guess You Like It' }"
-					@detail="navToDetailPage"
-					:bannerShow="false"
-				/>
+
 				<!--网站备案号-->
 				<!--#ifdef H5-->
 				<view class="copyright" v-if="config.web_site_icp">
@@ -132,18 +110,6 @@
 				</view>
 				<!-- #endif -->
 			</block>
-			<view v-else class="index-cate-product-list">
-				<rf-product-list :bottom="bottom" :list="categoryProductList"></rf-product-list>
-				<rf-load-more
-					:status="loadingType"
-					v-if="categoryProductList.length > 0"
-				></rf-load-more>
-				<rf-empty
-					:bottom="bottom"
-					:info="'暂无该分类产品~'"
-					v-if="categoryProductList.length === 0 && !productLoading"
-				></rf-empty>
-			</view>
 		</view>
 		<!--页面加载动画-->
 		<rfLoading isFullScreen :active="loading"></rfLoading>
@@ -151,6 +117,7 @@
 		<rf-back-home></rf-back-home>
 	</view>
 </template>
+
 <script>
 	/**
 	 * @des 微商城首页
@@ -167,14 +134,16 @@
 	import rfFloorIndex from '@/components/rf-floor-index';
 	import rfSearchBar from '@/components/rf-search-bar';
 	import rfSwiperSlide from '@/components/rf-swiper-slide';
-	import rfProductList from '@/components/rf-product-list';
 	import listCell from '@/components/rf-list-cell';
 	import { mapMutations } from 'vuex';
+	import homeData from '@/data/index.js'
+	import rfProductListCoup from '@/components/rf-product-list-coup';
+	import trans from '@/utils/trans';
 	export default {
 		components: {
 			rfFloorIndex,
 			rfSwipeDot,
-			rfProductList,
+			rfProductListCoup,
 			rfSearchBar,
 			listCell,
 			rfSwiperSlide
@@ -183,10 +152,11 @@
 			return {
 				current: 0, // 轮播图index
 				carouselList: {}, // 广告图
-				hotProductList: [], // 热门商品列表
-				recommendProductList: [], // 推荐商品列表
-				guessYouLikeProductList: [], // 猜您喜欢商品列表
+				// hotProductList: [], // 热门商品列表
+				// recommendProductList: [], // 推荐商品列表
+				// guessYouLikeProductList: [], // 猜您喜欢商品列表
 				newProductList: [], // 新品上市商品列表
+				TaoProductList: [],
 				productCateList: [], // 商品栏目
 				config: {}, // 商户配置
 				announceList: [], // 公告列表
@@ -203,12 +173,13 @@
 				categoryProductList: [], // 分类列表
 				page: 1,
 				currentCate: 0,
-				hotRecommendList: this.$mConstDataConfig.hotRecommendList,
+				// hotRecommendList: this.$mConstDataConfig.hotRecommendList,
 				productLoading: true,
 				isOpenIndexCate: this.$mSettingConfig.isOpenIndexCate,
 				moneySymbol: this.moneySymbol,
 				merchantShow: false,
-				merchantData: {}
+				merchantData: {},
+				material_id: 3756,
 			};
 		},
 		onPageScroll(e) {
@@ -341,12 +312,12 @@
 				this.$mRouter.push({ route });
 			},
 			// 跳转至分类模块
-			navToCategory(id) {
+			navToCategory(plat) {
 				if (this.$mSettingConfig.appCateType === '2') {
 					uni.setStorageSync('indexToCateId', id);
 					this.$mRouter.reLaunch({ route: '/pages/category/category' });
 				} else {
-					this.navTo(`/pages/product/list?cate_id=${id}`);
+					this.navTo(`/pages/product/list-simple?plat=`+plat)
 				}
 			},
 			// 通用跳转
@@ -361,18 +332,25 @@
 			},
 			// 获取主页数据
 			async getIndexList(type) {
+				var that = this
 				await this.$http
-					.get(`${indexList}`, {})
+					.taoGet('taobao.tbk.dg.optimus.material', {
+						'page_no':that.page,
+						'page_size':4,
+						'material_id': that.material_id,
+					})
 					.then(async r => {
 						uni.setNavigationBarTitle({ title: this.appName });
 						if (type === 'refresh') {
 							uni.stopPullDownRefresh();
 						}
-						// 首页参数赋值
-						this.initIndexData(r.data);
+						// // 首页参数赋值
+						var d = trans.taobaoList(r.data.tbk_dg_optimus_material_response.result_list.map_data)
+						this.initIndexData(d);
 						this.loading = false;
 					})
-					.catch(() => {
+					.catch((e) => {
+						console.log(e)
 						this.loading = false;
 						if (type === 'refresh') {
 							uni.stopPullDownRefresh();
@@ -381,23 +359,20 @@
 			},
 			// 首页参数赋值
 			initIndexData(data) {
-				this.announceList = data.announce;
-				this.productCateList = data.cate;
+				this.announceList = homeData.home.announce;
+				this.productCateList = homeData.home.cate;
 				this.categoryList = [{ id: 0, title: '首页' }, ...this.productCateList];
-				this.carouselList = data.adv;
-				this.search = data.search;
-				this.share = data.share;
+				this.carouselList = {'index_top': homeData.home.top};
+				this.search = homeData.home.search;
+				// this.share = data.share;
 				uni.setStorageSync('search', this.search);
-				this.hotSearchDefault = data.search.hot_search_default || '请输入关键字';
+				this.hotSearchDefault = this.search.hot_search_default || '请输入关键字';
 				uni.setStorage({
 					key: 'hotSearchDefault',
-					data: data.search.hot_search_default
+					data: this.search.hot_search_default
 				});
-				this.hotProductList = data.product_hot;
-				this.recommendProductList = data.product_recommend;
-				this.guessYouLikeProductList = data.guess_you_like;
-				this.newProductList = data.product_new;
-				this.config = data.config;
+				this.TaoProductList = data;
+				// this.config = data.config;
 				this.$mHelper.handleWxH5Share(this.share.share_title || this.appName, this.share.share_desc || `欢迎来到${this.appName}商城`, this.share.share_link || this.$mConfig.hostUrl, this.share.share_cover || this.$mSettingConfig.appLogo);
 			},
 			// 跳转至商品详情页

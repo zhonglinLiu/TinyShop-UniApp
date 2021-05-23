@@ -1,30 +1,22 @@
 <template>
+</template>
+
+<script>
+</script>
+
+<style>
+</style>
+<template>
 	<view class="container product-list">
 		<view class="rf-header-box">
 			<view class="rf-header" :style="{width:width+'px',height:height+'px'}">
 				<view class="rf-back" :style="{marginTop:arrowTop+'px'}" @tap="back">
 					<text class="iconfont iconzuo"></text>
 				</view>
-				<view class="input-box" :style="{marginTop:inputTop+'px'}">
-					<input
-						v-model="keyword"
-						@confirm="search"
-						placeholder="请输入关键字"
-						placeholder-style="font-size: 24upx; color:#ccc;"
-						type="text" />
-					<text class="icon iconfont iconsousuo2" @tap.stop="search"></text>
-				</view>
 			</view>
 		</view>
 		<view class="rf-header-screen" :style="{top:height+'px'}">
 			<view class="rf-screen-top">
-				<view class="rf-top-item rf-icon-ml" :class="[tabIndex==0? `text-${themeColor.name} rf-bold`:'']" data-index="0" @tap="screen">
-					<text>{{selectedName}}</text>
-					<text class="iconfont" :class="selectH>0?'iconshang':'iconxia'" :style="{color: tabIndex==0? themeColor.color:'#444'}"></text>
-				</view>
-				<view class="rf-top-item" :class="[tabIndex == 1?`text-${themeColor.name} rf-bold`:'']" @tap="screen" data-index="1">
-					销量
-				</view>
 				<view class="rf-top-item" @tap="screen" data-index="2">
 					<text class="iconfont" :class="isList>0? 'iconliebiaoqiehuan':'iconfenlei'"></text>
 				</view>
@@ -32,15 +24,6 @@
 					<text>筛选</text>
 					<!--<rf-icon name="screen" :size="12" color="#333" rf-icon-class="rf-ml" :bold="true"></rf-icon>-->
 				</view>
-				<!--下拉选择列表--综合-->
-				<view class="rf-dropdownlist" :class="[selectH>0?'rf-dropdownlist-show':'']" :style="{height:selectH+'upx'}">
-					<view class="rf-dropdownlist-item rf-icon-middle" :class="[item.selected?'rf-bold':'']" v-for="(item,index) in dropdownList" :key="index" @tap.stop="dropdownItem" :data-index="index">
-						<text class="rf-ml rf-middle">{{item.name}}</text>
-						<text class="iconfont icongouxuan" :class="'text-' + themeColor.name" v-if="item.selected"></text>
-					</view>
-				</view>
-				<view class="rf-dropdownlist-mask" :class="[selectH>0?'rf-mask-show':'']" @tap.stop="hideDropdownList"></view>
-				<!--下拉选择列表--综合-->
 			</view>
 			<view class="rf-screen-bottom">
 				<block v-for="(item,index) in attrArr" :key="index">
@@ -88,17 +71,6 @@
 			<view class="rf-drawer-box" :style="{paddingTop:height+'px'}">
 				<scroll-view class="rf-drawer-scroll" scroll-y :style="{height:drawerH+'px'}">
 					<view class="rf-drawer-title">
-						<text class="rf-title-bold">价格区间</text>
-						<view class="rf-attr-right" :class="'text-' + themeColor.name">
-							<text>请输入价格区间</text>
-						</view>
-					</view>
-					<view class="rf-drawer-content">
-						<input placeholder-class="rf-phcolor" v-model="minPrice" class="rf-input" placeholder="最低价" maxlength="11" type='number' />
-						<text>-</text>
-						<input placeholder-class="rf-phcolor" v-model="maxPrice"  class="rf-input" placeholder="最高价" maxlength="11" type='number' />
-					</view>
-					<view class="rf-drawer-title">
 						<text class="rf-title-bold">全部分类</text>
 						<view class="rf-all-box rf-icon-ml">
 							<view class="rf-attr-right" :class="'text-' + themeColor.name">{{ currentCateStr }}</view>
@@ -106,18 +78,6 @@
 					</view>
 					<view class="rf-drawer-content rf-flex-attr">
 						<view class="rf-attr-item" :class="[item.isActive ? `bg-${themeColor.name} rf-btmItem-active` : 'rf-btmItem-normal']" v-for="(item, index) in productCateList" :key="item.id" @tap.stop="cateBtnSelected(index)">
-							<view class="rf-attr-ellipsis">{{ item.title }}</view>
-						</view>
-					</view>
-
-					<view class="rf-drawer-title">
-						<text class="rf-title-bold">品牌</text>
-						<view class="rf-all-box rf-icon-ml">
-							<view class="rf-attr-right" :class="'text-' + themeColor.name">{{ currentBrandStr }}</view>
-						</view>
-					</view>
-					<view class="rf-drawer-content rf-flex-attr">
-						<view class="rf-attr-item" :class="[item.isActive ? `bg-${themeColor.name} rf-btmItem-active` : 'rf-btmItem-normal']" v-for="(item, index) in brandList" :key="item.id" @tap.stop="brandBtnSelected(index)">
 							<view class="rf-attr-ellipsis">{{ item.title }}</view>
 						</view>
 					</view>
@@ -174,7 +134,7 @@
 				productDetail: {},
 				searchKey: "", //搜索关键词
 				width: 200, //header宽度
-				height: 64, //header高度
+				height: 0, //header高度
 				inputTop: 0, //搜索框距离顶部距离
 				arrowTop: 0, //箭头距离顶部距离
 				dropScreenH: 0, //下拉筛选框距顶部距离
@@ -202,30 +162,17 @@
 					selected: false,
 					param: { price: 'desc' }
 				}],
-				attrArr: [
-					{
-						name: "全部",
-						selectedName: "全部",
-						isActive: true,
-						params: {},
-						list: []
-					},{
-					name: "天猫",
-					selectedName: "天猫",
-					isActive: false,
-					params: {is_tmall: 1},
+				attrArr: [{
+					name: "热门",
+					selectedName: "热门",
+					isActive: true,
+					params: { is_hot: 1 },
 					list: []
-				}, {
-					name: "优惠券",
-					selectedName: "优惠券",
+				},{
+					name: "品牌",
+					selectedName: "品牌",
 					isActive: false,
-					params: { has_coupon: 1 },
-					list: []
-				}, {
-					name: "包邮",
-					selectedName: "包邮",
-					isActive: false,
-					params: { need_free_shipment: 1 },
+					params: { is_brand: 1 },
 					list: []
 				}
 				],
@@ -296,9 +243,6 @@
 					this.keyword = options.keyword;
 					params.keyword = options.keyword;
 				}
-				if (Object.keys(params).length  == 0) {
-					params['cate_id'] = conf.allCate
-				}
 				this.productParams = params;
 				this.getProductList();
 			},
@@ -326,12 +270,11 @@
 					this.$set(this.attrArr[index], "isActive", !this.attrArr[index].isActive)
 				  if (this.attrArr[index].isActive && index === 0) {
 				    this.attrArr[1].isActive = false;
-				    this.attrArr[2].isActive = false;
-						this.attrArr[3].isActive = false;
 				  }
-					if (this.attrArr[1].isActive || this.attrArr[2].isActive || this.attrArr[3].isActive) {
+					if (this.attrArr[1].isActive) {
 				    this.attrArr[0].isActive = false;
 				  }
+					this.getProductCate()
 				} else {
 					this.attrData = arr;
 					this.attrIndex = index;
@@ -342,9 +285,9 @@
 						this.scrollTop = 0
 					});
 				}
-				let params = this.productParams;
+				let params = {};
 				if (this.attrArr[0].isActive) {
-					params['cate_id'] = conf.allCate
+					params = {};
 				} else {
 					params.keyword = this.keyword;
 				}
@@ -369,7 +312,7 @@
 				this.minPrice = '';
 				this.maxPrice = '';
 				await this.getBrandList();
-				await this.getProductCate();
+				this.getProductCate();
 			},
 			btnCloseDrop() {
 				this.scrollTop = 1;
@@ -404,7 +347,6 @@
 				this.selectH = 0
 			},
 			dropdownItem(e) {
-				console.log(e)
 				let index = parseInt(e.currentTarget.dataset.index, 10);
 				let arr = this.dropdownList;
 				for (let i = 0; i < arr.length; i++) {
@@ -420,11 +362,7 @@
 				this.page = 1;
 				this.productList = [];
 				this.loading = true;
-				if(index === 0) {
-					delete this.productParams['price']
-				} else {
-					this.productParams = Object.assign(this.productParams, this.dropdownList[index].param);
-				}
+				this.productParams = this.dropdownList[index].param;
 				this.getProductList();
 			},
 			screen(e) {
@@ -432,14 +370,13 @@
 				if (index === 0) {
 					this.showDropdownList();
 				} else if (index === 1) {
-					let params = this.productParams
+					let params = {}
 					if (this.tabIndex === 1) {
 						this.tabIndex = null;
-						delete params['total_sales']
+						params.total_sales = 'asc';
 					} else {
 						this.tabIndex = 1;
 						params.total_sales = 'desc';
-
 					}
 					this.page = 1;
 					this.productList = [];
@@ -460,7 +397,7 @@
 			},
 			closeDrawer() {
 				this.drawer = false;
-			  var params = this.productParams;
+			  const params = {};
 			  if (this.maxPrice) {
 			    params.max_price = this.maxPrice;
 			  }
@@ -493,6 +430,9 @@
 			},
 			cateBtnSelected(index) {
 			  this.currentCateStr = '';
+				this.productCateList.forEach(item => {
+				  item.isActive = false
+				});
 				this.$set(this.productCateList[index], "isActive", !this.productCateList[index].isActive);
 				const productCateArr = [];
 				this.productCateList.forEach(item => {
@@ -515,7 +455,10 @@
 			},
 			// 获取商品分类列表
 			getProductCate() {
-				this.productCateList = conf.taobaoRealCate
+				this.productCateList = conf.taobaoCate
+				if(this.productParams.is_brand == 1) {
+					this.productCateList = conf.taobaoBrandCate
+				}
 			},
 			// 获取商品品牌列表
 			async getBrandList() {
@@ -539,57 +482,34 @@
 			  this.productParams = { keyword: this.keyword };
 				this.getProductList();
 			},
+			getProductList(type) {
+				if(this.plat == 'taobao')  {
+					this.getTaoBaoProductList()
+				} else {
+					this.loading = false;
+				}
+			},
 			// 获取商品列表
-			async getProductList(type) {
+			async getTaoBaoProductList(type) {
+				this.getProductCate()
 				console.log(this.productParams)
 				var param = {
-					// q: this.productParams.keyword,
-					page_size:10,
+					material_id: this.productCateList[0].id,
+					page_size:11,
 					page_no: this.page,
 				}
-				if(this.productParams.keyword){
-					param.q = this.productParams.keyword
-				}
 				if(this.productParams.cate_id) {
-					param.cat = this.productParams.cate_id
-				}
-				if(this.productParams.price){
-					if(this.productParams.price == "desc") {
-						param.sort = 'price_des'
-					} else {
-						param.sort = 'price_asc'
-					}
-				} else if(this.productParams.total_sales){
-					if(this.productParams.total_sales == 'desc'){
-						param.sort = 'total_sales_des'
-					} else {
-						param.sort = 'total_sales_asc'
-					}
-				}
-				if (this.productParams.max_price){
-					param.end_price = parseInt(this.productParams.max_price)
-				}
-				if (this.productParams.min_price){
-					param.start_price = parseInt(this.productParams.min_price)
-				}
-				if  (this.productParams.is_tmall){
-					param.is_tmall = true
-				}
-				if (this.productParams.has_coupon){
-					param.has_coupon = true
-				}
-				if (this.productParams.need_free_shipment){
-					param.need_free_shipment = true
+					param.material_id = this.productParams.cate_id
 				}
 
 				await this.$http
-					.taoGet(`taobao.tbk.dg.material.optional`, param)
+					.taoGet(`taobao.tbk.dg.optimus.material`, param)
 					.then(async r => {
 						this.loading = false;
 						if (type === 'refresh') {
 							uni.stopPullDownRefresh();
 						}
-						var d = trans.taobaoList(r.data.tbk_dg_material_optional_response.result_list.map_data)
+						var d = trans.taobaoList(r.data.tbk_dg_optimus_material_response.result_list.map_data)
 						this.loadingType = d.length >= 10 ? 'more' : 'nomore';
 						this.productList = [...this.productList, ...d];
 

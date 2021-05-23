@@ -7,6 +7,8 @@
  * @Email webwork.s@qq.com
  * http://ext.dcloud.net.cn/plugin?id=392
  */
+import lmd5 from '../md5';
+import conf from '../conf'
 export default class Request {
 	config = {
 		baseUrl: '',
@@ -68,12 +70,12 @@ export default class Request {
 		 * @param {Request~responseErrCallback} ecb 响应拦截器，对响应错误做点什么
 		 */
 		response: (cb, ecb) => {
-			if (cb) {
-				this.requestComFun = cb;
-			}
-			if (ecb) {
-				this.requestComFail = ecb;
-			}
+			// if (cb) {
+			// 	this.requestComFun = cb;
+			// }
+			// if (ecb) {
+			// 	this.requestComFail = ecb;
+			// }
 		}
 	};
 
@@ -82,11 +84,11 @@ export default class Request {
 	}
 
 	requestComFun(response) {
-		return response;
+		return response.data;
 	}
 
 	requestComFail(response) {
-		return response;
+		return response.data;
 	}
 
 	/**
@@ -169,6 +171,7 @@ export default class Request {
 				sslVerify: _config.sslVerify,
 				// #endif
 				complete: response => {
+					console.log(response)
 					response.config = handleRe;
 					if (this.validateStatus(response.statusCode)) {
 						// 成功
@@ -189,6 +192,21 @@ export default class Request {
 	get(url, params = {}) {
 		const options = {};
 		options.params = params;
+		return this.request({
+			url,
+			method: 'GET',
+			...options
+		});
+	}
+
+	taoGet(method, params = {}) {
+		params['method'] = method;
+		console.log(params);
+		var options = {header:{
+      'content-type': 'application/x-www-form-urlencoded; charset=utf-8'
+    }};
+		options.params = params;
+		var url = conf.taobao_api
 		return this.request({
 			url,
 			method: 'GET',
@@ -436,3 +454,37 @@ export default class Request {
  * @callback Request~responseErrCallback
  * @param {Object} response - 请求结果 response
  */
+
+Date.prototype.format = function (format) {
+  /*
+   * eg:format="YYYY-MM-dd hh:mm:ss";
+     */
+  var o = {
+    "M+": this.getMonth() + 1,
+    // month
+    "d+": this.getDate(),
+    // day
+    "h+": this.getHours(),
+    // hour
+    "m+": this.getMinutes(),
+    // minute
+    "s+": this.getSeconds(),
+    // second
+    "q+": Math.floor((this.getMonth() + 3) / 3),
+    // quarter
+    "S": this.getMilliseconds() // millisecond
+
+  };
+
+  if (/(y+)/.test(format)) {
+    format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+  }
+
+  for (var k in o) {
+    if (new RegExp("(" + k + ")").test(format)) {
+      format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+    }
+  }
+
+  return format;
+};

@@ -1,0 +1,57 @@
+var taobaoCate = [
+	{child:[], 'id':3756, 'title':'综合'},
+	{child:[], 'id':3767, 'title':'女装'},
+	{child:[], 'id':3758, 'title':'家居家装'},
+	{child:[], 'id':3759, 'title':'数码家电'},
+	{child:[], 'id':3762, 'title':'鞋包配饰'},
+	{child:[], 'id':3763, 'title':'美妆个护'},
+	{child:[], 'id':3764, 'title':'男装'},
+	{child:[], 'id':3765, 'title':'内衣'},
+	{child:[], 'id':3760, 'title':'母婴'},
+	{child:[], 'id':3761, 'title':'食品'},
+	{child:[], 'id':3766, 'title':'运动户外'},
+]
+var taobaoBrandCate = [
+	{child:[], 'id':3786, 'title':'综合'},
+	{child:[], 'id':3788, 'title':'女装'},
+	{child:[], 'id':3792, 'title':'家居家装'},
+	{child:[], 'id':3793, 'title':'数码家电'},
+	{child:[], 'id':3796, 'title':'鞋包配饰'},
+	{child:[], 'id':3794, 'title':'美妆个护'},
+	{child:[], 'id':3790, 'title':'男装'},
+	{child:[], 'id':3787, 'title':'内衣'},
+	{child:[], 'id':3789, 'title':'母婴'},
+	{child:[], 'id':3791, 'title':'食品'},
+	{child:[], 'id':3795, 'title':'运动户外'},
+]
+var taobaoRealCate = [
+	{child:[], 'id':'16', 'title':'女装'},
+	{child:[], 'id':'1625', 'title':'内衣'},
+	{child:[], 'id':'50020808', 'title':'家居'},
+	{child:[], 'id':'50006843,50012029', 'title':'女鞋'},
+	{child:[], 'id':'50011740,50012029', 'title':'男鞋'},
+	{child:[], 'id':'50006842', 'title':'箱包'},
+	{child:[], 'id':'50014812,50025705,50008165,25', 'title':'母婴/童装/玩具'},
+	{child:[], 'id':'30,50011699,50013886,50510002', 'title':'男装/户外运动'},
+	{child:[], 'id':'50010788,50010728,122928002', 'title':'美妆/个护'},
+	{child:[], 'id':'1512,14,50011972', 'title':'手机/数码'},
+	{child:[], 'id':'50012082,50011972,50012082,50022703', 'title':'家电'},
+	{child:[], 'id':'50002766', 'title':'零食'},
+	{child:[], 'id':'50050359', 'title':'生鲜'},
+	{child:[], 'id':'50007216', 'title':'鲜花'},
+	{child:[], 'id':'33', 'title':'图书'},
+]
+
+var allCate = '16,30,50020808,50012029,50006842,14'
+export default {
+  // taobao_api: 'https://mango.wehere.top/taobaoke/openapi',
+	taobao_api:'http://127.0.0.1:9015/taobaoke/openapi',
+  taobao_transfor: 'https://mango.wehere.top/taobaoke/transfor',
+  tkl_api: 'https://mango.wehere.top/taobaoke/tkl',
+  duo_api:'https://mango.wehere.top/duoduo/query',
+  page_size: 20,
+	taobaoCate: taobaoCate,
+	taobaoBrandCate:taobaoBrandCate,
+	taobaoRealCate: taobaoRealCate,
+	allCate: allCate,
+};
