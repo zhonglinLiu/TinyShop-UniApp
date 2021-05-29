@@ -7,7 +7,6 @@
  * @Email webwork.s@qq.com
  * http://ext.dcloud.net.cn/plugin?id=392
  */
-import lmd5 from '../md5';
 import conf from '../conf'
 export default class Request {
 	config = {
@@ -211,6 +210,14 @@ export default class Request {
 			url,
 			method: 'GET',
 			...options
+		});
+	}
+
+	taoKouLing(id) {
+		var url = conf.tkl_api + '?item_id=' + id
+		return this.request({
+			url,
+			method: 'GET'
 		});
 	}
 

@@ -6,7 +6,7 @@
 				<view
 					v-if="(index + 1) % 2 !== 0 || isList"
 					class="rf-product-item"
-					@tap.stop="navTo(`/pages/product/product?id=${item.id}`)"
+					@tap.stop="navTo(`${item.id}`)"
 					:class="[isList ? 'rf-product-flex-list' : '']"
 					hover-class="hover"
 					:hover-start-time="150"
@@ -47,7 +47,8 @@
 				<view
 					v-if="(index + 1) % 2 === 0"
 					class="rf-product-item"
-					@tap.stop="navTo(`/pages/product/product?id=${item.id}`)"
+					@tap.stop="navTo(`${item.id}`)"
+					:product="item"
 					:class="[isList ? 'rf-product-flex-list' : '']"
 					hover-class="hover"
 					:hover-start-time="150"
@@ -149,7 +150,13 @@ export default {
 	methods: {
     ...mapMutations(['setCartNum']),
 		// 跳转详情
-		navTo(route) {
+		navTo(id) {
+			for(var k in this.list) {
+				if(this.list[k].id == id) {
+					uni.setStorageSync('product_id:' + id, this.list[k]);
+				}
+			}
+			var route = '/pages/product/product?id='+id
 			this.$mRouter.push({ route });
 		},
 		// 获取产品详情

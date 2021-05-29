@@ -269,7 +269,7 @@ export default new Setting(
 	$mConstData.appName,	// 应用名称
 	$mAssetsPath.logo,	// 应用logo
 	'1',	// 客服类型
-	$mAssetsPath.logo,	// 海报默认logo
+	'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/we-chat',	// 海报默认logo
 	true,	// 是否默认选中协议
 	true,	// 是否开启分销（无此功能）
 	true,	// 是否显示首页扫一扫按钮

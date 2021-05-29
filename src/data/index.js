@@ -14,13 +14,15 @@ var announce = [
 
 
 var top = [
-	{'id':1,'cover':'http://demo.rageframe.com/attachment/images/2020/10/22/image_1603328454_E2eurY68.jpg',
-	'jump_type':'', 'jump_link':'', 'title':'新鲜蔬菜'}
+	{'id':1,'cover':'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/banners/tiaomao618-banner.jpg',
+	'jump_type':'', 'jump_link':'https://s.click.taobao.com/VRMn3nu', 'title':'天猫618'},
+	{'id':2,'cover':'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/banners/yiyuangou.jpg',
+	'jump_type':'','jump_link':'https://s.click.taobao.com/2uIk3nu', 'title':'限量一元购'}
 ]
 
 var search = {
 	'hot_search_default':'蔬菜',
-	'hot_search_list': ["iphone", "小米", "华为", "面包机", "娃哈哈"],
+	'hot_search_list': ["外套", "T恤", "手链", "阿迪达斯", "耳机"],
 }
 var home = {
 	'cate': cate,

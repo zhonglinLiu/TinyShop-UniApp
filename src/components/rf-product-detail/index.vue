@@ -38,12 +38,12 @@
 					</view>
 					<view class="price-box" v-else>
 						<view class="price-first-line">
-							<image
+							<!-- <image
 								class="member-level"
 								mode="aspectFit"
-								v-if="product.memberDiscount != [] && product.memberDiscount && product.memberDiscount.discount > 0 && userInfo"
+								v-if="product.memberDiscount != [] && product.memberDiscount && product.memberDiscount.discount > 0 "
 								:src="vipPrice">
-							</image>
+							</image> -->
 							<text class="price" :class="'text-' + themeColor.name">{{ moneySymbol }}{{ currentProductPrice }}</text>
 						</view>
 						<view class="m-price-wrapper" v-if="product.market_price > product.price">
@@ -85,7 +85,7 @@
 					/>
 				</view>
 				<view class="data" v-if="product">
-					<text class="item">快递: {{ product.shipping_type === '1' ? '包邮' : '买家自付' }}</text>
+					<text class="item">快递: {{ product.shipping_type === '1' ? '包邮' : '不包邮' }}</text>
 					<text class="item">月销 {{ product.total_sales }}</text>
 					<text v-if="product.address_name" class="item in1line">{{ product.address_name }}</text>
 				</view>
@@ -104,131 +104,28 @@
 					</view>
 				</rf-item-popup>
 				<!--满减送-->
-				<rf-item-popup
-					v-if="product.fullGiveRule.length > 0"
-					title="满减送"
-					@hide="hideService"
-					@show="
-						showPopupService(
-							'fullGiveClass',
-							product.fullGiveRule
-						)
-					"
-					:specClass="fullGiveClass"
-				>
-					<view slot="content" class="con-list">
-						<text :class="'text-' + themeColor.name">{{ product.fullGiveRule[0] }}</text>
-					</view>
-					<view slot="right" v-if="product.fullGiveRule.length > 0"
-						><text class="iconfont iconyou"></text
-					></view>
-					<view slot="popup" class="service">
-						<view class="content">
-							<view
-								class="row"
-								v-for="(item, index) in product.fullGiveRule"
-								:key="index"
-							>
-								<text>{{ item }}</text>
-							</view>
-						</view>
-						<button class="btn" :class="'bg-' + themeColor.name" @tap="hideService">完成</button>
-					</view>
-				</rf-item-popup>
 				<!--满包邮-->
-				<rf-item-popup
+				<!-- <rf-item-popup
 					v-if="product.fullMail && product.fullMail.is_open === '1' && product.shipping_type !== '1'"
-					title="满包邮"
+					title="是否包邮"
+				> -->
+					<view slot="content" :class="'text-' + themeColor.name">{{ product.free_shipment == 1 ? '包邮' : '不包邮' }}</view>
+				</rf-item-popup>
+
+				<rf-item-popup
+					v-if="product.play_info"
+					title="优惠信息"
 				>
-					<view slot="content" :class="'text-' + themeColor.name">满{{ product.fullMail.full_mail_money }}元包邮</view>
+					<view slot="content" >{{ product.play_info }}</view>
+				</rf-item-popup>
+				<rf-item-popup
+					v-if="product.kuadian_promotion_info"
+					title="跨店满减"
+				>
+					<view slot="content" >{{ product.kuadian_promotion_info }}</view>
 				</rf-item-popup>
 				<!--购买类型-->
-				<rf-item-popup
-					title="购买类型"
-					@hide="hideService"
-					:specClass="specClass"
-					@show="toggleSpec"
-				>
-					<view slot="content">
-						<text class="selected-text" v-if="currentSkuName === singleSkuText">{{ currentCartCount }} {{ product.unit || '件' }}</text>
-						<text class="selected-text" v-else-if="currentSkuName">{{ currentSkuName }} * {{ currentCartCount }}</text>
-						<text class="selected-text" v-else>请选择规格</text>
-					</view>
-					<view slot="right"><text class="iconfont iconyou"></text></view>
-					<view slot="popup" @click.stop="stopPrevent">
-						<rf-attr-content
-							:type="type"
-							:product="product"
-							:minNum="minNum"
-							:maxNum="maxNum"
-							@toggle="toggleSpec"
-							></rf-attr-content>
-					</view>
-				</rf-item-popup>
 				<!--优惠券-->
-				<rf-item-popup
-					title="优惠券"
-					@hide="hideService"
-					:specClass="couponClass"
-					@show="showPopupService('couponClass', product.canReceiveCoupon)"
-					:isEmpty="product.canReceiveCoupon.length === 0"
-					empty="暂无可领取优惠券"
-				>
-					<view slot="content">
-						<text class="con t-r">领取优惠券</text>
-					</view>
-					<view slot="right" v-if="product.canReceiveCoupon.length > 0"><text class="iconfont iconyou"></text></view>
-					<view slot="popup" class="service">
-						<!-- 优惠券列表 -->
-						<view class="sub-list valid">
-							<view
-								class="row"
-								v-for="(item, index) in product.canReceiveCoupon"
-								:key="index"
-								@tap.stop="getCoupon(item)"
-							>
-								<view class="carrier">
-									<view class="title">
-										<view>
-											<text class="cell-icon" :class="'bg-' + themeColor.name">{{
-												parseInt(item.range_type, 10) === 2 ? '限' : '全'
-											}}</text>
-											<text class="cell-title">{{ item.title }}</text>
-										</view>
-										<view :class="'text-' + themeColor.name">
-											<text class="price" v-if="item.type === '1'">{{ moneySymbol }}{{ item.money }}</text>
-											<text class="price-discount" v-else>{{ `${item.discount / 10}折` }}</text>
-										</view>
-									</view>
-									<view class="term">
-										<text>{{ item.start_time | time }} ~ {{ item.end_time | time }}</text>
-										<text class="at_least">满{{ item.at_least }}可用</text>
-									</view>
-									<view class="usage">
-										<text>
-											{{
-												parseInt(item.range_type, 10) === 2
-													? '部分产品使用'
-													: '全场产品使用'
-											}}
-										</text>
-										<view>
-											{{
-												parseInt(item.max_fetch, 10) === 0
-													? '不限'
-													: `每人限领${item.max_fetch}`
-											}}
-											已领{{ item.get_count }}
-											<text class="last" v-if="item.percentage"
-												>剩余{{ item.percentage }}%</text
-											>
-										</view>
-									</view>
-								</view>
-							</view>
-						</view>
-					</view>
-				</rf-item-popup>
 				<!--限购说明-->
 				<rf-item-popup title="限购说明" v-if="type === 'buy_now' && parseInt(product.max_buy, 10) > 0">
 					<view slot="content">
@@ -280,89 +177,9 @@
 					</view>
 				</rf-item-popup>
 				<!--阶梯优惠-->
-				<rf-item-popup
-					title="阶梯优惠"
-					@hide="hideService"
-					@show="
-						showPopupService(
-							'ladderPreferentialClass',
-							product.ladderPreferential
-						)
-					"
-					:specClass="ladderPreferentialClass"
-					v-if="product.ladderPreferential.length > 0"
-				>
-					<view slot="content" class="con-list">
-						<text>
-							满{{
-								product.ladderPreferential &&
-									product.ladderPreferential[0] &&
-									product.ladderPreferential[0].quantity
-							}}{{ product.unit || '件' }}
-							<text
-								v-if="
-									parseInt(
-										product.ladderPreferential &&
-											product.ladderPreferential[0] &&
-											product.ladderPreferential[0].type,
-										10
-									) === 1
-								"
-							>
-								每{{ product.unit || '件' }}减{{
-									product.ladderPreferential &&
-										product.ladderPreferential[0] &&
-										product.ladderPreferential[0].price
-								}}元</text
-							>
-							<text
-								v-if="
-									parseInt(
-										product.ladderPreferential &&
-											product.ladderPreferential[0] &&
-											product.ladderPreferential[0].type,
-										10
-									) === 2
-								"
-							>
-								每{{ product.unit || '件' }}{{
-									parseInt(
-										product.ladderPreferential &&
-											product.ladderPreferential[0] &&
-											product.ladderPreferential[0].price,
-										10
-									)
-								}}折</text
-							>
-						</text>
-					</view>
-					<view slot="right" v-if="product.ladderPreferential.length > 0"
-						><text class="iconfont iconyou"></text
-					></view>
-					<view slot="popup" class="service">
-						<view class="content">
-							<view
-								class="row"
-								v-for="(item, index) in product.ladderPreferential"
-								:key="index"
-							>
-								<view class="title"
-									>满{{ item.quantity }}{{ product.unit || '件' }}
-									<text v-if="parseInt(item.type, 10) === 1"
-										>每{{ product.unit || '件' }}减{{ item.price }}元</text
-									>
-									<text v-if="parseInt(item.type, 10) === 2"
-										>每{{ product.unit || '件' }}{{ parseInt(item.price, 10) }}折</text
-									>
-								</view>
-							</view>
-						</view>
-						<button class="btn" :class="'bg-' + themeColor.name" @tap="hideService">完成</button>
-					</view>
-				</rf-item-popup>
 				<!--商品参数-->
 				<rf-item-popup
-					title="商品参数"
+					title="其他信息"
 					@hide="hideService"
 					@show="
 						showPopupService(
@@ -405,77 +222,14 @@
 				</rf-item-popup>
 			</view>
 			<!-- 评价 -->
-			<view class="eva-section" @tap="toEvaluateList">
-				<view class="e-header">
-					<text class="tit">评价({{ product.comment_num || 0 }})</text>
-					<text class="tip" v-if="product.match_ratio"
-						>好评率 {{ product.match_ratio }}%</text
-					>
-					<text class="tip" v-else>暂无评价信息</text>
-					<i class="iconfont iconyou"></i>
-				</view>
-				<view
-					class="eva-box"
-					v-if="product.evaluate && product.evaluate.length > 0"
-				>
-					<image
-						class="portrait"
-						:src="
-							(product.evaluate &&
-								product.evaluate[0] &&
-								product.evaluate[0].member_head_portrait) ||
-								headImg
-						"
-						mode="aspectFill"
-					></image>
-					<view class="right">
-						<view class="name">
-							<text>
-								{{
-									(product.evaluate &&
-										product.evaluate[0] &&
-										product.evaluate[0].member_nickname) ||
-										'匿名用户'
-								}}
-							</text>
-							<rf-rate
-								v-if="evaluateList.length > 0"
-								size="16"
-								disabled="true"
-								:value="evaluateList[0].scores"
-								:active-color="themeColor.color"
-							/>
-						</view>
-						<text class="con in2line">{{
-							(product.evaluate &&
-								product.evaluate[0] &&
-								product.evaluate[0].content) ||
-								'这个人很懒，什么都没留下~'
-						}}</text>
-						<view class="bot">
-							<text class="attr"
-								>购买类型：{{
-									(product.evaluate &&
-										product.evaluate[0] &&
-										product.evaluate[0].sku_name) ||
-										singleSkuText
-								}}</text>
-							<text class="time">{{
-								product.evaluate &&
-									product.evaluate[0] &&
-									product.evaluate[0].created_at | time
-							}}</text>
-						</view>
-					</view>
-				</view>
-			</view>
+
 			<!--底部商品详情-->
-			<view class="detail-desc">
+			<!-- <view class="detail-desc">
 				<view class="d-header">
 					<text>商品详情</text>
 				</view>
 				<rf-parser :html="product.intro" lazy-load></rf-parser>
-			</view>
+			</view> -->
 			<!-- 底部操作菜单 -->
 			<view class="page-bottom">
 				<view class="page-bottom-bth-wrapper">
@@ -487,7 +241,7 @@
 						<i class="iconfont iconzhuyedefuben"></i>
 						<text>首页</text>
 					</navigator>
-					<navigator
+					<!-- <navigator
 						url="/pages/cart/cart"
 						open-type="switchTab"
 						class="p-b-btn cart"
@@ -495,13 +249,13 @@
 						<i class="iconfont icongouwuche2"></i>
 						<text>购物车</text>
 						<rf-badge
-							v-if="hasLogin && cartNum && cartNum > 0"
+							v-if="false"
 							type="error"
 							size="small"
 							class="badge"
 							:text="cartNum"
 						></rf-badge>
-					</navigator>
+					</navigator> -->
 					<view @tap="kefuShow = true" class="p-b-btn">
 						<i class="iconfont iconkefu2"></i>
 						<text>客服</text>
@@ -509,32 +263,23 @@
 				</view>
 				<view
 					class="action-btn-group"
-					v-if="parseInt(this.currentStock || this.product.stock, 10) > 0"
+					v-if="true"
 				>
-					<button
+					<!-- <button
 						class="action-btn"
 						:class="'bg-' + themeColor.name"
 						:disabled="buyBtnDisabled"
 						@tap="addCart('buy')"
 					>
 						立即购买
-					</button>
+					</button> -->
 					<button
 						:disabled="addCartBtnDisabled"
-						class="action-btn"
+						class="action-btn copy-btn"
 						:class="'bg-' + themeColor.name"
-						@tap="addCart('cart')"
+						@tap="crateTaoKouLing()"
 					>
-						加入购物车
-					</button>
-				</view>
-				<view class="action-btn">
-					<button
-						v-if="parseInt(this.currentStock || this.product.stock, 10) === 0"
-						class="action-btn-submit"
-						:disabled="buyBtnDisabled"
-					>
-						库存不足
+						淘口令购买
 					</button>
 				</view>
 			</view>
@@ -593,6 +338,8 @@
 	import { collectCreate, collectDel, pickupPointIndex, transmitCreate } from '@/api/basic';
   import { couponReceive, addressList } from '@/api/userInfo';
 	import { mapMutations } from 'vuex';
+	import Clipboard from 'clipboard';
+
   export default {
     name: 'rfProductDetail',
     props: {
@@ -778,7 +525,7 @@
           this.$mHelper.h5Copy(this.url);
         }
         // #endif
-        // #ifdef APP-PLUS
+        // #ifdef a
 				this.$mHelper.handleAppShare(this.url, this.appName, this.product.name, this.product.picture);
 				// #endif
 			},
@@ -967,6 +714,54 @@
 				this.specClass = 'show';
 				this.cartType = type;
 				this.isPointExchange = isPointExchange;
+			},
+			crateTaoKouLing() {
+				var url = this.product.coupon_share_url
+				if (!url) {
+					url = this.product.url
+				}
+				if(url.indexOf("https") == -1) {
+					if(url.indexOf("http") != -1) {
+						url = url.replace('http', 'https');
+					} else {
+						url = url.replace('//uland.', 'https://uland.'),
+						url = url.replace('//s.click', 'https://s.click');
+					}
+				}
+				var that = this;
+				this.$http
+					.taoGet(`taobao.tbk.tpwd.create`, {
+						'text': 'tao',
+						'url': url,
+						'logo': that.product.pict_url.replace('//', ''),
+					})
+					.then(async r => {
+						var data = r.data.tbk_tpwd_create_response.data
+						let clipboard = new Clipboard('.copy-btn', {
+							text: function() {
+								return data
+							}
+						})
+						console.log(this.product)
+						clipboard.on('success', function(e) {
+							console.info('Action:', e.action);
+							console.info('Text:', e.text); //复制的文本内容
+							e.clearSelection(); //清除选中的文字的选择状态
+							uni.showToast({
+								icon: 'success', // success / none / loading 3个有效参数
+								title: '复制成功,请打开淘宝购买',
+								duration: 2000
+							});
+						});
+						clipboard.on('error', function (e) {
+							console.error('Action:', e.action);
+							console.error('Trigger:', e.trigger);
+						})
+					})
+					.catch(err => {
+						this.loading = false;
+						this.errorInfo = err;
+					});
 			},
 			stopPrevent() {}
     }
@@ -1206,5 +1001,8 @@
 			z-index: 98;
 		}
 	}
+}
+.page-bottom .page-bottom-bth-wrapper {
+	width: 32vw;
 }
 </style>

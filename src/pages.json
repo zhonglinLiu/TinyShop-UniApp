@@ -695,18 +695,18 @@
 				"selectedIconPath": "static/tab-cate-rf.png",
 				"text": "分类"
 			},
-			{
-				"pagePath": "pages/notify/notify",
-				"iconPath": "static/tab-notify.png",
-				"selectedIconPath": "static/tab-notify-rf.png",
-				"text": "消息"
-			},
-			{
-				"pagePath": "pages/cart/cart",
-				"iconPath": "static/tab-cart.png",
-				"selectedIconPath": "static/tab-cart-rf.png",
-				"text": "购物车"
-			},
+			// {
+			// 	"pagePath": "pages/notify/notify",
+			// 	"iconPath": "static/tab-notify.png",
+			// 	"selectedIconPath": "static/tab-notify-rf.png",
+			// 	"text": "消息"
+			// },
+			// {
+			// 	"pagePath": "pages/cart/cart",
+			// 	"iconPath": "static/tab-cart.png",
+			// 	"selectedIconPath": "static/tab-cart-rf.png",
+			// 	"text": "购物车"
+			// },
 			{
 				"pagePath": "pages/profile/profile",
 				"iconPath": "static/tab-my.png",

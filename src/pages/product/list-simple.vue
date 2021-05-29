@@ -514,13 +514,13 @@
 						this.productList = [...this.productList, ...d];
 
 					})
-					// .catch(err => {
-					// 	this.errorInfo = JSON.stringify(err);
-					// 	this.loading = false;
-					// 	if (type === 'refresh') {
-					// 		uni.stopPullDownRefresh();
-					// 	}
-					// });
+					.catch(err => {
+						this.errorInfo = JSON.stringify(err);
+						this.loading = false;
+						if (type === 'refresh') {
+							uni.stopPullDownRefresh();
+						}
+					});
 			},
 			// 跳转详情
 			navTo(route) {

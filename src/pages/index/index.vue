@@ -61,11 +61,11 @@
 					</swiper-item>
 				</swiper>
 				<!--新闻通知-->
-				<rf-swiper-slide v-if="announceList.length > 0" :list="announceList" class="rf-skeleton" @navTo="navTo('/pages/index/notice/notice')">
+				<!-- <rf-swiper-slide v-if="announceList.length > 0" :list="announceList" class="rf-skeleton" @navTo="navTo('/pages/index/notice/notice')">
 					<view slot="header" class="swiper-slide-header">
 						<text class="iconfont icongonggao" :class="'text-'+themeColor.name"></text>
 					</view>
-				</rf-swiper-slide>
+				</rf-swiper-slide> -->
 				<!-- 爆款推荐 -->
 				<!-- <view class="hot-recommend">
 					<view class="left">
@@ -89,7 +89,7 @@
 					:banner="carouselList.index_new && carouselList.index_new[0]"
 				/>
 
-				<rf-floor-index
+			<!-- 	<rf-floor-index
 					icon="iconxinpin2"
 					:bannerShow="false"
 					:list="newProductList"
@@ -100,16 +100,28 @@
 					:header="{ title: '拼多多', desc: '领券值降' }"
 					@detail="navToDetailPage"
 					:banner="carouselList.index_new && carouselList.index_new[0]"
-				/>
+				/> -->
 
 				<!--网站备案号-->
 				<!--#ifdef H5-->
 				<view class="copyright" v-if="config.web_site_icp">
 					{{ config.copyright_desc }}
-					<a href="http://www.beian.miit.gov.cn">{{ config.web_site_icp }}</a>
+					<a href="https://beian.miit.gov.cn/">{{ config.web_site_icp }}</a>
 				</view>
 				<!-- #endif -->
 			</block>
+			<view v-else class="index-cate-product-list">
+				<rf-product-list-coup :bottom="bottom" :list="categoryProductList"></rf-product-list-coup>
+				<rf-load-more
+					:status="loadingType"
+					v-if="categoryProductList.length > 0"
+				></rf-load-more>
+				<rf-empty
+					:bottom="bottom"
+					:info="'暂无该分类产品~'"
+					v-if="categoryProductList.length === 0 && !productLoading"
+				></rf-empty>
+			</view>
 		</view>
 		<!--页面加载动画-->
 		<rfLoading isFullScreen :active="loading"></rfLoading>
@@ -139,6 +151,7 @@
 	import homeData from '@/data/index.js'
 	import rfProductListCoup from '@/components/rf-product-list-coup';
 	import trans from '@/utils/trans';
+	import conf from '@/utils/conf'
 	export default {
 		components: {
 			rfFloorIndex,
@@ -158,7 +171,10 @@
 				newProductList: [], // 新品上市商品列表
 				TaoProductList: [],
 				productCateList: [], // 商品栏目
-				config: {}, // 商户配置
+				config: {
+					'web_site_icp':'豫ICP备17025106号-2',
+					'copyright_desc':'copyright hi.life@qq.com'
+				}, // 商户配置
 				announceList: [], // 公告列表
 				share: {},
 				loading: true,
@@ -264,23 +280,45 @@
 				this.categoryProductList = [];
 				this.getProductList(id);
 			},
-			// 获取产品列表
+
 			async getProductList(id) {
+				var param = {
+					material_id: id,
+					page_size:10,
+					page_no: this.page,
+				}
+
 				await this.$http
-					.get(`${productList}`, {
-						cate_id: id,
-						page: this.page
-					})
+					.taoGet(`taobao.tbk.dg.optimus.material`, param)
 					.then(async r => {
 						this.loading = false;
-						this.productLoading = false;
-						this.loadingType = r.data.length < 10 ? 'nomore' : 'more';
-						this.categoryProductList = [...this.categoryProductList, ...r.data];
-					}).catch(() => {
+						var d = trans.taobaoList(r.data.tbk_dg_optimus_material_response.result_list.map_data)
+						this.loadingType = d.length >= 8 ? 'more' : 'nomore';
+						this.categoryProductList = [...this.categoryProductList, ...d];
+					})
+					.catch(err => {
+						this.errorInfo = JSON.stringify(err);
 						this.loading = false;
 						this.productLoading = false;
 					});
 			},
+			// 获取产品列表
+			// async getProductList(id) {
+			// 	await this.$http
+			// 		.get(`${productList}`, {
+			// 			cate_id: id,
+			// 			page: this.page
+			// 		})
+			// 		.then(async r => {
+			// 			this.loading = false;
+			// 			this.productLoading = false;
+			// 			this.loadingType = r.data.length < 10 ? 'nomore' : 'more';
+			// 			this.categoryProductList = [...this.categoryProductList, ...r.data];
+			// 		}).catch(() => {
+			// 			this.loading = false;
+			// 			this.productLoading = false;
+			// 		});
+			// },
 			...mapMutations(['setCartNum']),
 			// 监听轮播图切换
 			handleDotChange(e) {
@@ -313,6 +351,14 @@
 			},
 			// 跳转至分类模块
 			navToCategory(plat) {
+				if(plat != 'taobao') {
+					uni.showToast({
+						icon: 'none', // success / none / loading 3个有效参数
+						title: '功能开发中，敬请期待...',
+						duration: 2000
+					});
+					return
+				}
 				if (this.$mSettingConfig.appCateType === '2') {
 					uni.setStorageSync('indexToCateId', id);
 					this.$mRouter.reLaunch({ route: '/pages/category/category' });
@@ -361,7 +407,7 @@
 			initIndexData(data) {
 				this.announceList = homeData.home.announce;
 				this.productCateList = homeData.home.cate;
-				this.categoryList = [{ id: 0, title: '首页' }, ...this.productCateList];
+				this.categoryList = [{ id: 0, title: '首页' }, ...conf.taobaoCate];
 				this.carouselList = {'index_top': homeData.home.top};
 				this.search = homeData.home.search;
 				// this.share = data.share;

@@ -436,7 +436,8 @@ export default {
 					// #endif
 					break;
 				default:
-					break;
+					window.open(id)
+					return
 			}
 			if (url) {
 				mRouter.push({ route: url });

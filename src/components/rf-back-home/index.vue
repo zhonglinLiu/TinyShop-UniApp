@@ -5,27 +5,46 @@
 				<text class="iconfont iconsousuo2" @tap="navTo('/pages/index/search/search')"></text>
 			</view>
 			<view class="wrapper">
-				<text class="iconfont iconshouhoukefu" @tap="navTo('/pages/product/service/index')"></text>
+				<text class="iconfont iconshouhoukefu" @tap="kefuShow = true"></text>
 			</view>
-			<view class="wrapper">
+			<!-- <view class="wrapper">
 				<text class="iconfont icongouwuche3" @tap="navTo('/pages/cart/cart', 'tab')"></text>
-			</view>
+			</view> -->
 		</view>
 		<view class="menu" :class="'bg-' + themeColor.name" @tap.stop="open">
 			<text class="iconfont iconkuaijiecaidan"></text>
 		</view>
+		<view
+			class="popup spec show"
+			v-if="kefuShow"
+			@touchmove.stop.prevent="stopPrevent"
+			@tap="hide"
+		>
+			<!-- 遮罩层 -->
+			<view class="mask" @tap="hide"></view>
+			<view class="kefu-bg">
+				<image :src="appServiceQr"></image>
+			</view>
+		</view>
 	</view>
+
 </template>
 <script>
 	export default {
 		name: 'Home',
 		data() {
 			return {
-				homeActive: true
+				homeActive: true,
+				kefuShow: false,
+				appServiceQr:this.$mSettingConfig.appServiceQr,
 			};
 		},
 		methods: {
+			stopPrevent() {},
 			// 切换语言
+			hide() {
+				this.kefuShow = false
+			},
 			switchLanguage() {
 				if (this._i18n.locale === 'zh') {
 					this._i18n.locale = 'uyghur';
@@ -97,7 +116,7 @@
 		.on {
 			opacity: 1;
 			transform: scale(1);
-			height: 280upx;
+			height: 190upx;
 			width: 72upx;
 			margin-bottom: 20upx;
 		}
@@ -114,6 +133,19 @@
 				opacity: 1;
 				color: $color-white;
 				z-index: 92;
+			}
+		}
+		.kefu-bg {
+			height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			z-index: 98;
+			image {
+				width: 60vw;
+				height: 60vw;
+				border-radius: 12upx;
+				z-index: 98;
 			}
 		}
 	}

@@ -38,6 +38,8 @@ import { productDetail } from '@/api/product';
 import rfProductDetail from '@/components/rf-product-detail';
 import rfBackTop from '@/components/rf-back-top';
 import rfNoData from '@/components/rf-no-data';
+import conf from '@/utils/conf'
+import trans from '@/utils/trans'
 export default {
 	components: {
 		rfProductDetail,
@@ -79,25 +81,40 @@ export default {
 		},
 		// 数据初始化
 		async initData() {
+			var host = 'https://' + document.domain
       if (this.userInfo.promo_code) {
-        this.currentUrl = `${this.$mConfig.hostUrl}/pages/product/product?id=${this.productId}&promo_code=${this.userInfo.promo_code}`;
+        this.currentUrl = `${host}/pages/product/product?id=${this.productId}&promo_code=${this.userInfo.promo_code}`;
       } else {
-        this.currentUrl = `${this.$mConfig.hostUrl}/pages/product/product?id=${this.productId}`;
+        this.currentUrl = `${host}/pages/product/product?id=${this.productId}`;
       }
 			this.hasLogin = this.$mStore.getters.hasLogin;
 			await this.getProductDetail();
 		},
 		// 获取产品详情
 		async getProductDetail() {
+			var data = uni.getStorageSync('product_id:' + this.productId);
+			if(data) {
+				this.productDetail = trans.taobaoDetail(data);
+				console.log(this.productDetail)
+				this.loading = false;
+				return
+			}
 			await this.$http
-				.get(`${productDetail}`, {
-					id: this.productId
+				.taoGet(`taobao.tbk.item.info.get`, {
+					num_iids: this.productId,
 				})
 				.then(async r => {
-					this.loading = false;
-					this.productDetail = r.data;
-					uni.setNavigationBarTitle({ title: r.data.name });
-					await this.$mHelper.handleWxH5Share(this.appName, r.data.name, this.currentUrl, r.data.picture);
+					data = r.data.tbk_item_info_get_response.results.n_tbk_item[0]
+					this.$http.taoKouLing(this.productId).then(async r => {
+						data['coupon'] = r.data.result.data
+						this.productDetail = trans.taobaoDetail(data);
+						uni.setNavigationBarTitle({ title: this.productDetail.name });
+						await this.$mHelper.handleWxH5Share(this.appName, this.productDetail.name, this.currentUrl, this.productDetail.picture);
+						this.loading = false;
+					}).catch(err => {
+						this.loading = false;
+						this.errorInfo = err;
+					});
 				})
 				.catch(err => {
 					this.loading = false;
