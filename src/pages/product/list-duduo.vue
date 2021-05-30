@@ -163,30 +163,30 @@
 					param: { price: 'desc' }
 				}],
 				attrArr: [{
-					name: "热门",
-					selectedName: "热门",
+					name: "今日热销",
+					selectedName: "今日热销",
 					isActive: true,
-					params: { is_hot: 1 },
+					params: { channel_type: 1 },
 					list: []
 				},{
-					name: "品牌",
-					selectedName: "品牌",
+					name: "实时热销",
+					selectedName: "实时热销",
 					isActive: false,
-					params: { is_brand: 1 },
+					params: { channel_type: 5 },
 					list: []
 				}
 				],
-				productList: [
-				],
+				productList: [],
 				pageIndex: 1,
 				pullUpOn: true,
-				productCateList: [],
+				productCateList: conf.pddCate,
 				brandList: [],
 				currentCateStr: '',
 				currentBrandStr: '',
 				minPrice: '',
 				maxPrice: '',
-				productParams: {}
+				productParams: {},
+				list_id: "",
 			}
 		},
 		onLoad(options) {
@@ -232,7 +232,7 @@
       ...mapMutations(['setCartNum']),
 			// 初始化数据
 			initData(options) {
-			  let params = {};
+			  let params = this.productParams;
 			  if (options.cate_id) {
 					params.cate_id = options.cate_id;
 			  }
@@ -285,7 +285,7 @@
 						this.scrollTop = 0
 					});
 				}
-				let params = {};
+				let params = this.productParams;
 				if (this.attrArr[0].isActive) {
 					params = {};
 				} else {
@@ -311,7 +311,6 @@
       	this.currentCateStr = '';
 				this.minPrice = '';
 				this.maxPrice = '';
-				await this.getBrandList();
 				this.getProductCate();
 			},
 			btnCloseDrop() {
@@ -386,18 +385,12 @@
 				} else if (index === 2) {
 					this.isList = !this.isList
 				} else if (index === 3) {
-				  if (this.productCateList.length === 0) {
-						this.getProductCate();
-				  }
-				  if (this.brandList.length === 0) {
-						this.getBrandList();
-				  }
 					this.drawer = true;
 				}
 			},
 			closeDrawer() {
 				this.drawer = false;
-			  const params = {};
+			  const params = this.productParams;
 			  if (this.maxPrice) {
 			    params.max_price = this.maxPrice;
 			  }
@@ -455,18 +448,7 @@
 			},
 			// 获取商品分类列表
 			getProductCate() {
-				this.productCateList = conf.taobaoCate
-				if(this.productParams.is_brand == 1) {
-					this.productCateList = conf.taobaoBrandCate
-				}
-			},
-			// 获取商品品牌列表
-			async getBrandList() {
-				// await this.$http
-				// 	.get(`${brandIndex}`)
-				// 	.then(r => {
-				// 	  this.brandList = r.data;
-				// 	});
+				this.productCateList = conf.pddCate
 			},
 			back() {
 				if (this.drawer) {
@@ -483,19 +465,48 @@
 				this.getProductList();
 			},
 			getProductList(type) {
-				if(this.plat == 'taobao')  {
-					this.getTaoBaoProductList()
-				} else {
-					this.loading = false;
+				this.getProductCate()
+				this.getPddProductList()
+			},
+			async getPddProductList(type) {
+				var that = this
+				var params = {
+					'limit':10,
+					'offset': (that.page-1) * 10,
 				}
+				if(this.productParams.channel_type){
+					params['channel_type'] = this.productParams.channel_type;
+				}
+				if(this.productParams.cate_id) {
+					params['activity_tags'] = JSON.stringify([this.productParams.cate_id])
+				}
+				console.log(this.productParams)
+				await this.$http
+					.pddGet('pdd.ddk.goods.recommend.get', params)
+					.then(async r => {
+						uni.setNavigationBarTitle({ title: this.appName });
+						if (type === 'refresh') {
+							uni.stopPullDownRefresh();
+						}
+						// // 首页参数赋值
+						this.list_id = r.data.goods_basic_detail_response.search_id
+						var d = trans.paddList(r.data.goods_basic_detail_response.list, this.list_id)
+						this.loadingType = d.length >= 10 ? 'more' : 'nomore';
+						this.productList = [...this.productList, ...d];
+						this.loading = false;
+					})
+					.catch((e) => {
+						this.loading = false;
+						if (type === 'refresh') {
+							uni.stopPullDownRefresh();
+						}
+					});
 			},
 			// 获取商品列表
 			async getTaoBaoProductList(type) {
-				this.getProductCate()
-				console.log(this.productParams)
 				var param = {
 					material_id: this.productCateList[0].id,
-					page_size:20,
+					page_size:11,
 					page_no: this.page,
 				}
 				if(this.productParams.cate_id) {

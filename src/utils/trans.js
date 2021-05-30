@@ -1,16 +1,26 @@
 
-function duoduoList(coupon) {
-	coupon.zk_final_price = coupon.min_normal_price
-	coupon.coupon_amount = coupon.coupon_discount
-	coupon.title = coupon.goods_name
-	coupon.item_id = coupon.mall_id
-	coupon.pict_url = coupon.goods_image_url
-	coupon.item_description = coupon.goods_desc
-	coupon.volume = coupon.sales_tip
-	coupon.nick = coupon.mall_name
-	coupon.small_images = coupon.goods_gallery_urls
-	coupon.coupon_remain_count = coupon.coupon_remain_quantity
-	return coupon
+
+function paddList(items, search_id) {
+	var ress = []
+	for (var i in items) {
+		var res = {
+			'plat': 'pdd',
+			'cost_price':items[i].coupon_discount / 100,
+			'id':items[i].goods_sign,
+			'name':items[i].goods_name,
+			'price':items[i].min_group_price / 100,
+			'sketch':items[i].goods_desc,
+			'total_sales':items[i].sales_tip,
+			'picture': items[i].goods_image_url,
+			'coupon_price': items[i].coupon_discount/100,
+			'search_id': search_id,
+		}
+		for(var k in items[i]) {
+			res[k] = items[i][k]
+		}
+		ress.push(res)
+	}
+	return ress
 }
 
 function taobaoList(items) {
@@ -38,6 +48,70 @@ function taobaoList(items) {
 	return ress
 }
 
+function pdd_mall_type(type) {
+	if(type==1) {
+		return '个人'
+	} else if(type == 2) {
+		return '企业'
+	} else if(type == 3) {
+		return '旗舰店'
+	} else if(type == 4) {
+		return '专卖店'
+	} else if(type == 5) {
+		return '专营店'
+	} else if(type == 6)  {
+		return '普通店'
+	} else {
+		return '未知'
+	}
+}
+var pddServiceMap = {
+	4:'送货入户并安装', 5:'送货入户', 6:'电子发票', 9:'坏果包赔', 11:'闪电退款', 12:'24小时发货',
+	13:'48小时发货', 17:'顺丰包邮', 18:'只换不修', 19:'预约配送', 1000001:'正品发票', 1000002:'送货入户并安装'
+}
+function pddService(tags) {
+	var res = []
+	for(var k in tags) {
+		res.push(pddServiceMap[tags[k]])
+	}
+	return res
+}
+function pddDetail(item) {
+	var price = (item.min_group_price - item.coupon_discount)/100
+	var res = {
+		'price': price,
+		'palt': 'pdd',
+		'pict_url': item.goods_image_url,
+		'name': item.goods_name,
+		'sketch': '',
+		'shipping_type': 1,
+		'point_exchange_type':'1',
+		'total_sales': item.sales_tip,
+		// 'address_name': item.provcity,
+		'covers': item.goods_gallery_urls,
+		'nick': item.mall_name,
+		// 'provcity': item.provcity,
+		// 'item_url': item.item_url,
+		'picture':item.pict_url,
+		'tags':pddService(item.service_tags),
+		'attributeValue':[
+			{'title':'平台', 'value':'拼多多'},
+			{'title':'店铺名称', 'value':item.mall_name},
+			{'title':'品牌', 'value':item.brand_name},
+			{'title':'销量', 'value':item.sales_tip},
+			{'title':'店铺类型', 'value':pdd_mall_type(item.merchant_type) },
+			{'title':'服务分', 'value':item.serv_txt},
+			],
+		'base_attribute_format':[],
+		'minSkuPrice':price,
+		'maxSkuPrice': price,
+		'market_price': item.min_group_price/100,
+	}
+	for(var k in item) {
+		res[k] = item[k]
+	}
+	return res
+}
 function taobaoDetail(item) {
 	item.zk_final_price = parseFloat(item.zk_final_price)
 	if(item.coupon) {
@@ -82,7 +156,7 @@ function taobaoDetail(item) {
 
 	if(item.coupon_amount) {
 		res['price'] = (item.zk_final_price - item.coupon_amount).toFixed(2)
-	} else {
+	} else if(item.coupon) {
 		var match = item.coupon.coupon_info.match(/.*?减(\w+)元/);
 		res['price'] = (item.zk_final_price - match[1]).toFixed(2)
 	}
@@ -107,7 +181,8 @@ function taobaoDetail(item) {
 }
 
 export default {
-	duoduoList: duoduoList,
 	taobaoList: taobaoList,
 	taobaoDetail: taobaoDetail,
+	paddList: paddList,
+	pddDetail: pddDetail,
 }

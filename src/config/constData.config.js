@@ -1,6 +1,6 @@
 export default {
 	// app应用名称
-	appName: 'RF商城',
+	appName: '爱淘APP',
 
 	// 购物车在tab的位置
 	cartIndex: 3,
@@ -20,39 +20,45 @@ export default {
   // 顶部导航菜单
   menuTop: [
 				{
-					icon: 'iconxiaoxi1',
-					text: '消息',
-          urlType: 'tab',
-          url: '/pages/notify/notify'
-				},
-				{
 					icon: 'iconzhuyedefuben',
 					text: '首页',
           urlType: 'tab',
           url: '/pages/index/index'
 				},
 				{
-					icon: 'iconwode-',
-					text: '我的',
-          urlType: 'tab',
-          url: '/pages/profile/profile'
+					icon: 'iconsousuo',
+					text: '搜索',
+				  urlType: 'tab',
+				  url: '/pages/category/category'
 				},
 				{
-					icon: 'icongouwuche2',
-					text: '购物车',
-          urlType: 'tab',
-          url: '/pages/cart/cart'
+					icon: 'iconxiaoxi1',
+					text: '消息',
+				  urlType: 'tab',
+				  url: '/pages/index/notify/notice'
 				},
-				{
-					icon: 'iconbianji',
-					text: '我要反馈',
-					url: '/pages/set/feedback/feedback'
-				},
-				{
-					icon: 'iconquanbudingdan',
-					text: '我的订单',
-					url: '/pages/order/order?state=-1'
-				}
+				// {
+				// 	icon: 'iconwode-',
+				// 	text: '我的',
+    //       urlType: 'tab',
+    //       url: '/pages/profile/profile'
+				// },
+				// {
+				// 	icon: 'icongouwuche2',
+				// 	text: '购物车',
+    //       urlType: 'tab',
+    //       url: '/pages/cart/cart'
+				// },
+				// {
+				// 	icon: 'iconbianji',
+				// 	text: '我要反馈',
+				// 	url: '/pages/set/feedback/feedback'
+				// },
+				// {
+				// 	icon: 'iconquanbudingdan',
+				// 	text: '我的订单',
+				// 	url: '/pages/order/order?state=-1'
+				// }
 			],
 
 	// 个人中心-设置中心菜单 e07472 ff4757 ff6b81

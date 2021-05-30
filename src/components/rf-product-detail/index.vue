@@ -273,7 +273,15 @@
 					>
 						立即购买
 					</button> -->
-					<button
+					<button v-if="plat == 'pdd'"
+						:disabled="addCartBtnDisabled"
+						class="action-btn copy-btn"
+						:class="'bg-' + themeColor.name"
+						@tap="openPdd()"
+					>
+						领取优惠券
+					</button>
+					<button v-else
 						:disabled="addCartBtnDisabled"
 						class="action-btn copy-btn"
 						:class="'bg-' + themeColor.name"
@@ -363,6 +371,10 @@
 			marketType: {
 				type: String,
 				default: 'buy_now'
+			},
+			plat:{
+				type: String,
+				default: 'taobao'
 			}
     },
 		components: {
@@ -416,7 +428,7 @@
         moneySymbol: this.moneySymbol,
 				state: 1,
         singleSkuText: this.singleSkuText,
-				thirdPartyQrCodeImg: ''
+				thirdPartyQrCodeImg: '',
 			};
 		},
 		async onShareAppMessage () {
@@ -714,6 +726,45 @@
 				this.specClass = 'show';
 				this.cartType = type;
 				this.isPointExchange = isPointExchange;
+			},
+			openPdd() {
+				var that = this;
+				this.loading = true;
+				this.$http.pddGet('pdd.ddk.goods.promotion.url.generate',{
+					'search_id': that.product.search_id,
+					'goods_sign_list': JSON.stringify([that.product.goods_sign])
+				})
+				.then(async r => {
+					console.log(r.data)
+					this.loading = false;
+					if(!r.data.goods_promotion_url_generate_response) {
+						uni.showToast({
+								title: '未知错误',
+								duration: 2000
+						});
+						return
+					}
+					if(!r.data.goods_promotion_url_generate_response.goods_promotion_url_list) {
+						uni.showToast({
+								title: '未知错误',
+								duration: 2000
+						});
+						return
+					}
+					var data = r.data.goods_promotion_url_generate_response.goods_promotion_url_list[0]
+					uni.showModal({
+						title:'即将打开“拼多多”',
+						success:function(e) {
+							if( e.confirm ){
+								window.open(data.url)
+							}
+						}
+					})
+				})
+				.catch(err => {
+					this.loading = false;
+					this.errorInfo = err;
+				});
 			},
 			crateTaoKouLing() {
 				var url = this.product.coupon_share_url

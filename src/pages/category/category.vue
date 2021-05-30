@@ -52,7 +52,7 @@
 							v-for="sItem in fItem.child"
 							:key="sItem.id"
 						>
-							<view class="second-category-text" @tap="navTo(`/pages/product/list?cate_id=${sItem.id}`)">
+							<view class="second-category-text" @tap="navTo(`/pages/product/list?cate_id=${sItem.id}&plat=pdd`)">
 								{{ sItem.title }}
 								<text class="iconfont iconyou"></text>
 							</view>
@@ -61,7 +61,7 @@
 									class="box"
 									v-for="tItem in sItem.child"
 									:key="tItem.id"
-									@tap.stop="navTo(`/pages/product/list?cate_id=${tItem.id}`)"
+									@tap.stop="navTo(`/pages/product/list?cate_id=${tItem.id}&plat=pdd`)"
 								>
 									<block v-if="styleCateType === 'one_two_three_cover'">
 										<image :src="tItem.cover || errorImage"></image>
@@ -124,6 +124,7 @@ import rfSearchBar from '@/components/rf-search-bar';
 import rfAttrContent from '@/components/rf-attr-content';
 import { advList } from '@/api/basic';
 import { mapMutations } from 'vuex';
+import conf from '@/utils/conf'
 export default {
 	components: {
 		rfSearchBar,
@@ -288,6 +289,7 @@ export default {
 		},
 		// 获取商品分类列表
 		async getProductCate(type) {
+			// this.$http.pddCateGet({'cat_id':8583})
 			await this.$http
 				.get(`${productCate}`)
 				.then(async r => {
@@ -302,7 +304,9 @@ export default {
 					// 		this.categoryList.push(item);
 					// 	}
 					// });
-					this.categoryList = r.data;
+					this.categoryList = conf.pddRealCate;
+					console.log(r.data)
+					console.log(conf.pddRealCate)
 					let cateId = uni.getStorageSync('indexToCateId');
 					if (cateId) {
 						this.categoryList.forEach((item, index) => {
@@ -311,15 +315,15 @@ export default {
 							}
 						});
 					} else {
-						if (this.styleCateType === 'one_two_product' && r.data[0].child.length > 0) {
-							this.currentCateId = r.data[0].child[0].id;
+						if (this.styleCateType === 'one_two_product' && this.categoryList[0].child.length > 0) {
+							this.currentCateId = this.categoryList[0].child[0].id;
 						} else {
 							this.showCategoryIndex = 0;
 							this.currentCateId = this.categoryList && this.categoryList[0].id;
 						}
 					}
-					if (r.data.length > 0) {
-						this.currentSecondCategoryList = r.data[0].child;
+					if (this.categoryList.length > 0) {
+						this.currentSecondCategoryList = this.categoryList[0].child;
 					}
 					this.page = 1;
 					this.categoryProductList = [];

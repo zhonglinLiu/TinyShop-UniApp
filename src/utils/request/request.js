@@ -213,6 +213,37 @@ export default class Request {
 		});
 	}
 
+	pddGet(method, params = {}) {
+		params['type'] = method;
+		params['p_id'] = '15049004_204443814'
+		params['pid'] = '15049004_204443814'
+		var options = {header:{
+		  'content-type': 'application/x-www-form-urlencoded; charset=utf-8'
+		}};
+		options.params = params;
+		var url = conf.duo_api
+		return this.request({
+			url,
+			method: 'GET',
+			...options
+		});
+	}
+
+	pddCateGet(params = {}) {
+		params['p_id'] = '15049004_204443814'
+		params['pid'] = '15049004_204443814'
+		var options = {header:{
+		  'content-type': 'application/x-www-form-urlencoded; charset=utf-8'
+		}};
+		options.params = params;
+		var url = conf.duo_cat_api
+		return this.request({
+			url,
+			method: 'GET',
+			...options
+		});
+	}
+
 	taoKouLing(id) {
 		var url = conf.tkl_api + '?item_id=' + id
 		return this.request({

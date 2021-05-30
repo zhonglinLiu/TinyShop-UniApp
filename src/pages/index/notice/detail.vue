@@ -27,7 +27,7 @@
 <script>
 import { notifyAnnounceView } from '@/api/basic';
 import moment from '@/common/moment';
-
+import data from '@/data/index'
 export default {
 	data() {
 		return {
@@ -55,6 +55,12 @@ export default {
 	methods: {
 		// 获取通知列表
 		async getNotifyAnnounceView(id) {
+			this.loading = false;
+			this.announceDetail = data.notice_map[id]
+			uni.setNavigationBarTitle({
+				title: r.data.title
+			});
+			return
 			await this.$http
 				.get(`${notifyAnnounceView}`, { id })
 				.then(r => {

@@ -151,12 +151,17 @@ export default {
     ...mapMutations(['setCartNum']),
 		// 跳转详情
 		navTo(id) {
+			var plat = 'taobao'
 			for(var k in this.list) {
 				if(this.list[k].id == id) {
+					plat = this.list[k].plat
 					uni.setStorageSync('product_id:' + id, this.list[k]);
 				}
 			}
-			var route = '/pages/product/product?id='+id
+			var route = '/pages/product/product?plat=taobao&id='+id
+			if(plat == 'pdd') {
+				route = '/pages/product/pdd-product?plat=pdd&id='+id
+			}
 			this.$mRouter.push({ route });
 		},
 		// 获取产品详情

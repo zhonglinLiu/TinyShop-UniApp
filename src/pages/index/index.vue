@@ -89,18 +89,18 @@
 					:banner="carouselList.index_new && carouselList.index_new[0]"
 				/>
 
-			<!-- 	<rf-floor-index
+				<rf-floor-index
 					icon="iconxinpin2"
 					:bannerShow="false"
-					:list="newProductList"
+					:list="PddProductList"
 					@toBanner="indexTopToDetailPage"
 					@toList="
-					navTo(`/pages/product/list?param=${JSON.stringify({ is_new: 1 })}`)
+					navTo(`/pages/product/list-duduo?plat=pdd`)
 				"
 					:header="{ title: '拼多多', desc: '领券值降' }"
 					@detail="navToDetailPage"
 					:banner="carouselList.index_new && carouselList.index_new[0]"
-				/> -->
+				/>
 
 				<!--网站备案号-->
 				<!--#ifdef H5-->
@@ -168,12 +168,12 @@
 				// hotProductList: [], // 热门商品列表
 				// recommendProductList: [], // 推荐商品列表
 				// guessYouLikeProductList: [], // 猜您喜欢商品列表
-				newProductList: [], // 新品上市商品列表
+				PddProductList: [],
 				TaoProductList: [],
 				productCateList: [], // 商品栏目
 				config: {
 					'web_site_icp':'豫ICP备17025106号-2',
-					'copyright_desc':'copyright hi.life@qq.com'
+					'copyright_desc':'Copyright 2021 hi.life@qq.com All rights reserved.'
 				}, // 商户配置
 				announceList: [], // 公告列表
 				share: {},
@@ -196,6 +196,7 @@
 				merchantShow: false,
 				merchantData: {},
 				material_id: 3756,
+				list_id:"",
 			};
 		},
 		onPageScroll(e) {
@@ -327,7 +328,9 @@
 			// 数据初始化
 			initData() {
 				// 设置购物车数量角标
+				this.initIndexData();
 				this.getIndexList();
+				this.getPddList();
 				this.initCartItemCount();
 			},
 			// 设置购物车数量角标
@@ -351,7 +354,7 @@
 			},
 			// 跳转至分类模块
 			navToCategory(plat) {
-				if(plat != 'taobao') {
+				if(plat != 'taobao' && plat != 'pdd') {
 					uni.showToast({
 						icon: 'none', // success / none / loading 3个有效参数
 						title: '功能开发中，敬请期待...',
@@ -363,7 +366,12 @@
 					uni.setStorageSync('indexToCateId', id);
 					this.$mRouter.reLaunch({ route: '/pages/category/category' });
 				} else {
-					this.navTo(`/pages/product/list-simple?plat=`+plat)
+					if(plat == 'taobao'){
+						this.navTo(`/pages/product/list-simple?plat=`+plat)
+					} else if(plat == 'pdd'){
+						this.navTo(`/pages/product/list-duduo?plat=`+plat)
+					}
+
 				}
 			},
 			// 通用跳转
@@ -376,13 +384,39 @@
 			indexTopToDetailPage(item) {
 				this.$mHelper.handleBannerNavTo(item.jump_type, item.jump_link, item.id);
 			},
+			async getPddList(type) {
+				var that = this
+				await this.$http
+					.pddGet('pdd.ddk.goods.recommend.get', {
+						'limit':10,
+						'list_id':that.list_id,
+						'offset': (that.page-1) * 10
+					})
+					.then(async r => {
+						uni.setNavigationBarTitle({ title: this.appName });
+						if (type === 'refresh') {
+							uni.stopPullDownRefresh();
+						}
+						// // 首页参数赋值
+						this.list_id = r.data.goods_basic_detail_response.search_id
+						var d = trans.paddList(r.data.goods_basic_detail_response.list, this.list_id)
+						this.PddProductList = d;
+						this.loading = false;
+					})
+					.catch((e) => {
+						this.loading = false;
+						if (type === 'refresh') {
+							uni.stopPullDownRefresh();
+						}
+					});
+			},
 			// 获取主页数据
 			async getIndexList(type) {
 				var that = this
 				await this.$http
 					.taoGet('taobao.tbk.dg.optimus.material', {
 						'page_no':that.page,
-						'page_size':4,
+						'page_size':10,
 						'material_id': that.material_id,
 					})
 					.then(async r => {
@@ -392,11 +426,10 @@
 						}
 						// // 首页参数赋值
 						var d = trans.taobaoList(r.data.tbk_dg_optimus_material_response.result_list.map_data)
-						this.initIndexData(d);
+						this.TaoProductList = d;
 						this.loading = false;
 					})
 					.catch((e) => {
-						console.log(e)
 						this.loading = false;
 						if (type === 'refresh') {
 							uni.stopPullDownRefresh();
@@ -417,7 +450,6 @@
 					key: 'hotSearchDefault',
 					data: this.search.hot_search_default
 				});
-				this.TaoProductList = data;
 				// this.config = data.config;
 				this.$mHelper.handleWxH5Share(this.share.share_title || this.appName, this.share.share_desc || `欢迎来到${this.appName}商城`, this.share.share_link || this.$mConfig.hostUrl, this.share.share_cover || this.$mSettingConfig.appLogo);
 			},

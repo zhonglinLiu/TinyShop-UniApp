@@ -30,7 +30,7 @@
 				</view>
 				<view class="rf-top-item rf-icon-ml" @tap="screen" data-index="3">
 					<text>筛选</text>
-					<!--<rf-icon name="screen" :size="12" color="#333" rf-icon-class="rf-ml" :bold="true"></rf-icon>-->
+					<!-- <rf-icon name="screen" :size="12" color="#333" rf-icon-class="rf-ml" :bold="true"></rf-icon> -->
 				</view>
 				<!--下拉选择列表--综合-->
 				<view class="rf-dropdownlist" :class="[selectH>0?'rf-dropdownlist-show':'']" :style="{height:selectH+'upx'}">
@@ -43,13 +43,21 @@
 				<!--下拉选择列表--综合-->
 			</view>
 			<view class="rf-screen-bottom">
+				<block v-for="(item,index) in platAttrArr" :key="index">
+					<view class="rf-bottom-item rf-icon-ml" :class="[item.isActive ? `bg-${themeColor.name} rf-btmItem-active` : 'rf-btmItem-normal',attrIndex==index?'rf-btmItem-tap':'']" :data-index="index" @tap="btnPlatDropChange">
+						<view class="rf-bottom-text" :class="[attrIndex==index?'rf-active':'']">{{item.isActive?item.selectedName:item.name}}</view>
+						<text class="iconfont" :class="attrIndex==index?'iconshang':'iconxia'" :size="14" :color="attrIndex==index || item.isActive?'$base-color':'#444'" rf-icon-class="rf-ml" v-if="item.list.length>0"></text>
+					</view>
+				</block>
+			</view>
+			<!-- <view class="rf-screen-bottom">
 				<block v-for="(item,index) in attrArr" :key="index">
 					<view class="rf-bottom-item rf-icon-ml" :class="[item.isActive ? `bg-${themeColor.name} rf-btmItem-active` : 'rf-btmItem-normal',attrIndex==index?'rf-btmItem-tap':'']" :data-index="index" @tap="btnDropChange">
 						<view class="rf-bottom-text" :class="[attrIndex==index?'rf-active':'']">{{item.isActive?item.selectedName:item.name}}</view>
 						<text class="iconfont" :class="attrIndex==index?'iconshang':'iconxia'" :size="14" :color="attrIndex==index || item.isActive?'$base-color':'#444'" rf-icon-class="rf-ml" v-if="item.list.length>0"></text>
 					</view>
 				</block>
-			</view>
+			</view> -->
 		</view>
 		<view class="product-list-wrapper">
 				<rf-product-list-coup :bottom="0" :list="productList" :isList="isList" :style="{paddingTop: dropScreenH+10 + 'upx' }"></rf-product-list-coup>
@@ -189,48 +197,10 @@
 				selectedName: "综合",
 				selectH: 0,
 				plat: 'taobao',
-				dropdownList: [{
-					name: "综合",
-					selected: true,
-					param: {}
-				}, {
-					name: "价格升序",
-					selected: false,
-					param: { price: 'asc' }
-				}, {
-					name: "价格降序",
-					selected: false,
-					param: { price: 'desc' }
-				}],
-				attrArr: [
-					{
-						name: "全部",
-						selectedName: "全部",
-						isActive: true,
-						params: {},
-						list: []
-					},{
-					name: "天猫",
-					selectedName: "天猫",
-					isActive: false,
-					params: {is_tmall: 1},
-					list: []
-				}, {
-					name: "优惠券",
-					selectedName: "优惠券",
-					isActive: false,
-					params: { has_coupon: 1 },
-					list: []
-				}, {
-					name: "包邮",
-					selectedName: "包邮",
-					isActive: false,
-					params: { need_free_shipment: 1 },
-					list: []
-				}
-				],
-				productList: [
-				],
+				dropdownList: conf.searchDropdownList,
+				attrArr: conf.selectCondition,
+				platAttrArr:conf.platSelectCondition,
+				productList: [],
 				pageIndex: 1,
 				pullUpOn: true,
 				productCateList: [],
@@ -239,7 +209,7 @@
 				currentBrandStr: '',
 				minPrice: '',
 				maxPrice: '',
-				productParams: {}
+				productParams: {},
 			}
 		},
 		onLoad(options) {
@@ -267,6 +237,9 @@
 					this.plat = options.plat
 				}
 			});
+			if(options.plat) {
+				this.plat = options.plat
+			}
 			this.initData(options);
 		},
 		// 下拉刷新
@@ -285,22 +258,26 @@
       ...mapMutations(['setCartNum']),
 			// 初始化数据
 			initData(options) {
-			  let params = {};
-			  if (options.cate_id) {
-					params.cate_id = options.cate_id;
-			  }
-				if (options.param) {
-				  params = { ...params, ...JSON.parse(options.param) }
+				this.keyword = options.keyword
+				if(options.plat){
+					this.plat = options.plat
+				} else {
+					this.plat = 'taobao'
 				}
-				if (options.keyword) {
-					this.keyword = options.keyword;
-					params.keyword = options.keyword;
+				if (Object.keys(options).length  == 0 && options.plat == 'taobao') {
+					options['cate_id'] = conf.allCate
 				}
-				if (Object.keys(params).length  == 0) {
-					params['cate_id'] = conf.allCate
+
+				for(var k in this.platAttrArr) {
+					if(this.platAttrArr[k].params.plat == this.plat) {
+						this.platAttrArr[k].isActive = true
+					} else {
+						this.platAttrArr[k].isActive = false
+					}
 				}
-				this.productParams = params;
+				this.productParams = options;
 				this.getProductList();
+				this.getProductCate();
 			},
 			stopPrevent() {},
 
@@ -318,6 +295,32 @@
 			},
 			px(num) {
 				return uni.upx2px(num) + "px"
+			},
+			btnPlatDropChange(e) {
+				let index = parseInt(e.currentTarget.dataset.index, 10);
+				let arr = JSON.parse(JSON.stringify(this.platAttrArr[index].list));
+				for(var k in this.platAttrArr) {
+					this.platAttrArr[k].isActive = false
+				}
+				this.platAttrArr[index].isActive = true
+				this.scrollTop = 1;
+				this.$nextTick(() => {
+					this.scrollTop = 0
+				});
+				let params = this.productParams;
+				this.platAttrArr.forEach(item => {
+					if (item.isActive) {
+						params = {...params, ...item.params }
+					}
+				});
+				if(params.plat) {
+					this.plat = params.plat
+				}
+				this.page = 1;
+				this.productList = [];
+				this.loading = true;
+				this.productParams = params;
+				this.initData(this.productParams)
 			},
 			btnDropChange(e) {
 				let index = parseInt(e.currentTarget.dataset.index, 10);
@@ -345,9 +348,8 @@
 				let params = this.productParams;
 				if (this.attrArr[0].isActive) {
 					params['cate_id'] = conf.allCate
-				} else {
-					params.keyword = this.keyword;
 				}
+				params.keyword = this.keyword;
 				this.attrArr.forEach(item => {
 					if (item.isActive) {
 						params = {...params, ...item.params }
@@ -368,8 +370,7 @@
       	this.currentCateStr = '';
 				this.minPrice = '';
 				this.maxPrice = '';
-				await this.getBrandList();
-				await this.getProductCate();
+				this.getProductCate();
 			},
 			btnCloseDrop() {
 				this.scrollTop = 1;
@@ -404,7 +405,6 @@
 				this.selectH = 0
 			},
 			dropdownItem(e) {
-				console.log(e)
 				let index = parseInt(e.currentTarget.dataset.index, 10);
 				let arr = this.dropdownList;
 				for (let i = 0; i < arr.length; i++) {
@@ -515,7 +515,20 @@
 			},
 			// 获取商品分类列表
 			getProductCate() {
-				this.productCateList = conf.taobaoRealCate
+				var plat = this.plat;
+				if(plat == 'pdd') {
+					var cats = []
+					for(var k in conf.pddRealCate) {
+						cats = [...cats, ...conf.pddRealCate[k].child]
+					}
+					this.productCateList = cats
+				} else if(plat == 'jd') {
+
+				} else if(plat == 'wph') {
+
+				} else {
+					this.productCateList = conf.taobaoRealCate
+				}
 			},
 			// 获取商品品牌列表
 			async getBrandList() {
@@ -542,10 +555,76 @@
 			// 获取商品列表
 			async getProductList(type) {
 				console.log(this.productParams)
+
+				if(this.plat == 'taobao') {
+					this.taobaoReq(type)
+				} else if(this.plat == 'pdd') {
+					this.pddReq(type)
+				} else {
+					this.loading = false;
+				}
+			},
+			pddReq(type) {
 				var param = {
-					// q: this.productParams.keyword,
-					page_size:10,
+					page_size:20,
+					page: this.page,
+					with_coupon: true,
+				}
+				if(this.productParams.cate_id) {
+					param.cat_id = this.productParams.cate_id
+				}
+				if(this.productParams.price){
+					if(this.productParams.price == "desc") {
+						param.sort_type = 4
+					} else {
+						param.sort_type = 3
+					}
+				} else if(this.productParams.total_sales){
+					if(this.productParams.total_sales == 'desc'){
+						param.sort_type = 6
+					} else {
+						param.sort_type = 5
+					}
+				}
+				if(this.productParams.keyword){
+					param.keyword = this.productParams.keyword
+				}
+				var range_list = {}
+				if (this.productParams.max_price){
+					range_list.range_to = parseInt(this.productParams.max_price)
+					range_list.range_id = 2
+				}
+				if (this.productParams.min_price){
+					range_list.range_from = parseInt(this.productParams.min_price)
+					range_list.range_id = 2
+				}
+				if(range_list.range_id) {
+					param.range_list = JSON.stringify(range_list)
+				}
+				this.$http.pddGet('pdd.ddk.goods.search',param)
+					.then(async r => {
+						this.loading = false;
+						if (type === 'refresh') {
+							uni.stopPullDownRefresh();
+						}
+						var res_data = r.data.goods_search_response
+						var d = trans.paddList(res_data.goods_list, res_data.search_id)
+						this.loadingType = d.length >= 20 ? 'more' : 'nomore';
+						this.productList = [...this.productList, ...d];
+					})
+					.catch(err => {
+						this.errorInfo = JSON.stringify(err);
+						this.loading = false;
+						if (type === 'refresh') {
+							uni.stopPullDownRefresh();
+						}
+					});
+			},
+			taobaoReq(type) {
+				var param = {
+					page_size:20,
 					page_no: this.page,
+					has_coupon: true,
 				}
 				if(this.productParams.keyword){
 					param.q = this.productParams.keyword
@@ -581,8 +660,7 @@
 				if (this.productParams.need_free_shipment){
 					param.need_free_shipment = true
 				}
-
-				await this.$http
+				this.$http
 					.taoGet(`taobao.tbk.dg.material.optional`, param)
 					.then(async r => {
 						this.loading = false;
@@ -590,17 +668,17 @@
 							uni.stopPullDownRefresh();
 						}
 						var d = trans.taobaoList(r.data.tbk_dg_material_optional_response.result_list.map_data)
-						this.loadingType = d.length >= 10 ? 'more' : 'nomore';
+						this.loadingType = d.length >= 20 ? 'more' : 'nomore';
 						this.productList = [...this.productList, ...d];
 
 					})
-					// .catch(err => {
-					// 	this.errorInfo = JSON.stringify(err);
-					// 	this.loading = false;
-					// 	if (type === 'refresh') {
-					// 		uni.stopPullDownRefresh();
-					// 	}
-					// });
+					.catch(err => {
+						this.errorInfo = JSON.stringify(err);
+						this.loading = false;
+						if (type === 'refresh') {
+							uni.stopPullDownRefresh();
+						}
+					});
 			},
 			// 跳转详情
 			navTo(route) {

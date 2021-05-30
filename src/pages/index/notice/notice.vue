@@ -44,6 +44,7 @@
 import { notifyAnnounceIndex } from '@/api/basic';
 import rfLoadMore from '@/components/rf-load-more/rf-load-more.vue';
 import moment from '@/common/moment';
+import data from '@/data/index'
 export default {
 	components: { rfLoadMore },
 	data() {
@@ -82,6 +83,9 @@ export default {
 		},
 		// 获取通知列表
 		async getNotifyAnnounceIndex(type) {
+			this.announceList = data.notice_list
+			this.loading = false;
+			return
 			await this.$http
 				.get(`${notifyAnnounceIndex}`, { page: this.page })
 				.then(r => {
