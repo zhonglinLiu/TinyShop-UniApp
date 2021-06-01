@@ -232,6 +232,7 @@
       ...mapMutations(['setCartNum']),
 			// 初始化数据
 			initData(options) {
+				document.title = '淘宝'
 			  let params = {};
 			  if (options.cate_id) {
 					params.cate_id = options.cate_id;
@@ -241,7 +242,6 @@
 				}
 				if (options.keyword) {
 					this.keyword = options.keyword;
-					params.keyword = options.keyword;
 				}
 				this.productParams = params;
 				this.getProductList();
@@ -286,11 +286,7 @@
 					});
 				}
 				let params = {};
-				if (this.attrArr[0].isActive) {
-					params = {};
-				} else {
-					params.keyword = this.keyword;
-				}
+				params.keyword = this.keyword;
 				this.attrArr.forEach(item => {
 					if (item.isActive) {
 						params = {...params, ...item.params }
@@ -311,7 +307,6 @@
       	this.currentCateStr = '';
 				this.minPrice = '';
 				this.maxPrice = '';
-				await this.getBrandList();
 				this.getProductCate();
 			},
 			btnCloseDrop() {
@@ -479,10 +474,12 @@
 			  this.page = 1;
 			  this.productList = [];
 			  this.loading = true;
-			  this.productParams = { keyword: this.keyword };
 				this.getProductList();
 			},
 			getProductList(type) {
+				if(this.keyword){
+					this.productParams.keyword = this.keyword
+				}
 				if(this.plat == 'taobao')  {
 					this.getTaoBaoProductList()
 				} else {

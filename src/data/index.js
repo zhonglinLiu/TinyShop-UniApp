@@ -12,12 +12,16 @@ var announce = [
 	{'cover':'url','id':2, 'title':'关于网站'}
 ]
 
-
+var banner_url = 'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/banners/'
 var top = [
-	{'id':1,'cover':'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/banners/tiaomao618-banner.jpg',
+	{'id':1,'cover':banner_url + 'tiaomao618-banner.jpg',
 	'jump_type':'', 'jump_link':'https://s.click.taobao.com/VRMn3nu', 'title':'天猫618'},
-	{'id':2,'cover':'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/banners/yiyuangou.jpg',
-	'jump_type':'','jump_link':'https://s.click.taobao.com/2uIk3nu', 'title':'限量一元购'}
+	{'id':2,'cover':banner_url + 'yiyuangou.jpg',
+	'jump_type':'','jump_link':'https://s.click.taobao.com/2uIk3nu', 'title':'限量一元购'},
+	{'id':3,'cover':banner_url + 'duoduo-qianwanbutie.jpg',
+	'jump_type':'','jump_link':'https://p.pinduoduo.com/WjAFubZf', 'title':'千万补贴 百万爆款'},
+	{'id':4,'cover':banner_url + 'duoduo-huili.jpg',
+	'jump_type':'','jump_link':'https://p.pinduoduo.com/AgmFuWWC', 'title':'回力多多品牌日'}
 ]
 
 var search = {
@@ -55,7 +59,7 @@ var notice_map = {
         "id": 1,
         "title": "关于作者",
         "merchant_id": 0,
-        "content": "<p>本站作者是一个热爱生活，热爱购物的90后软件攻城狮，对本站有任何建议可以邮箱告知<a href='mailto:hi.life@qq.com'>hi.life@qq.com</a>，您的反馈和建议是作者开发维护本站的动力</p>",
+        "content": "<p>本站作者是一个热爱生活，热爱购物的90后软件攻城狮。对本站有任何建议都可以发到作者邮箱<a href=mailto:hi.life@qq.com>hi.life@qq.com</a>，您的反馈和建议是作者开发维护本站的动力。</p>",
         "cover": "",
         "synopsis": "今天消息是这样",
         "type": 1,

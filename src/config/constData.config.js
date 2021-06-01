@@ -35,7 +35,7 @@ export default {
 					icon: 'iconxiaoxi1',
 					text: '消息',
 				  urlType: 'tab',
-				  url: '/pages/index/notify/notice'
+				  url: '/pages/index/notice/notice'
 				},
 				// {
 				// 	icon: 'iconwode-',

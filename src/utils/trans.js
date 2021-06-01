@@ -117,6 +117,19 @@ function taobaoDetail(item) {
 	if(item.coupon) {
 		item.category_name = item.coupon.cat_leaf_name
 	}
+	var attrs = [
+		{'title':'平台', 'value':'淘宝'},
+		{'title':'店铺名称', 'value':item.nick},
+		{'title':'20天销量', 'value':item.volume},
+		{'title':'是否加入消费者保障', 'value':item.is_prepay ? '是' : '否' },
+	]
+	if(item.level_one_category_name){
+		attrs.push({'title':'商品类别', 'value':item.level_one_category_name})
+	}
+	var tags = []
+	if(item.kuadian_promotion_info) {
+		tags = [...tags, ...item.kuadian_promotion_info]
+	}
 	var res = {
 		'price': item.zk_final_price,
 		'pict_url': item.pict_url,
@@ -131,14 +144,8 @@ function taobaoDetail(item) {
 		'provcity': item.provcity,
 		'item_url': item.item_url,
 		'picture':item.pict_url,
-		'tags':["正品保障"],
-		'attributeValue':[
-			{'title':'平台', 'value':'淘宝'},
-			{'title':'店铺名称', 'value':item.nick},
-			{'title':'商品类别', 'value':item.category_name},
-			{'title':'20天销量', 'value':item.volume},
-			{'title':'是否加入消费者保障', 'value':item.is_prepay ? '是' : '否' },
-			],
+		'tags':tags,
+		'attributeValue':attrs,
 		'base_attribute_format':[{'title':'颜色？','show_type':2}],
 		'minSkuPrice':item.zk_final_price,
 		'maxSkuPrice': item.zk_final_price,

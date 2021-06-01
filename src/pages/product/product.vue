@@ -95,7 +95,7 @@ export default {
 			var data = uni.getStorageSync('product_id:' + this.productId);
 			if(data) {
 				this.productDetail = trans.taobaoDetail(data);
-				console.log(this.productDetail)
+				document.title = this.productDetail.name
 				this.loading = false;
 				return
 			}
@@ -108,8 +108,9 @@ export default {
 					this.$http.taoKouLing(this.productId).then(async r => {
 						data['coupon'] = r.data.result.data
 						this.productDetail = trans.taobaoDetail(data);
-						uni.setNavigationBarTitle({ title: this.productDetail.name });
+						// uni.setNavigationBarTitle({ title: this.productDetail.name });
 						await this.$mHelper.handleWxH5Share(this.appName, this.productDetail.name, this.currentUrl, this.productDetail.picture);
+						document.title = this.productDetail.name
 						this.loading = false;
 					}).catch(err => {
 						this.loading = false;

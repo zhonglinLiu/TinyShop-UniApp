@@ -85,7 +85,7 @@
 					/>
 				</view>
 				<view class="data" v-if="product">
-					<text class="item">快递: {{ product.shipping_type === '1' ? '包邮' : '不包邮' }}</text>
+					<text class="item">快递: {{ product.shipping_type === '1' ? '包邮' : '包邮' }}</text>
 					<text class="item">月销 {{ product.total_sales }}</text>
 					<text v-if="product.address_name" class="item in1line">{{ product.address_name }}</text>
 				</view>
@@ -109,7 +109,7 @@
 					v-if="product.fullMail && product.fullMail.is_open === '1' && product.shipping_type !== '1'"
 					title="是否包邮"
 				> -->
-					<view slot="content" :class="'text-' + themeColor.name">{{ product.free_shipment == 1 ? '包邮' : '不包邮' }}</view>
+					<view slot="content" :class="'text-' + themeColor.name">{{ product.free_shipment == 1 ? '包邮' : '包邮' }}</view>
 				</rf-item-popup>
 
 				<rf-item-popup
@@ -275,7 +275,7 @@
 					</button> -->
 					<button v-if="plat == 'pdd'"
 						:disabled="addCartBtnDisabled"
-						class="action-btn copy-btn"
+						class="action-btn"
 						:class="'bg-' + themeColor.name"
 						@tap="openPdd()"
 					>
@@ -534,7 +534,7 @@
         if (this.$mPayment.isWechat()) {
           this.shareClass = 'show';
         } else {
-          this.$mHelper.h5Copy(this.url);
+          this.$mHelper.h5Copy(this.product.name + '  ' + this.url);
         }
         // #endif
         // #ifdef a
@@ -767,6 +767,7 @@
 				});
 			},
 			crateTaoKouLing() {
+				this.loading = true;
 				var url = this.product.coupon_share_url
 				if (!url) {
 					url = this.product.url

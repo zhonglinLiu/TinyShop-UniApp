@@ -79,12 +79,15 @@ export default {
 	methods: {
 		// 数据初始化
 		initData() {
+			document.title = '公告'
 			this.getNotifyAnnounceIndex();
 		},
 		// 获取通知列表
 		async getNotifyAnnounceIndex(type) {
 			this.announceList = data.notice_list
+			uni.stopPullDownRefresh();
 			this.loading = false;
+			this.loadingType = 'nomore'
 			return
 			await this.$http
 				.get(`${notifyAnnounceIndex}`, { page: this.page })

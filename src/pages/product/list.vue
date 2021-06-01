@@ -154,6 +154,7 @@
 	import { mapMutations } from 'vuex';
   import trans from '@/utils/trans';
 	import conf from '@/utils/conf';
+	import util from '@/utils/util'
 	/* eslint-disable */
 	export default {
 		components: {
@@ -264,7 +265,8 @@
 				} else {
 					this.plat = 'taobao'
 				}
-				if (Object.keys(options).length  == 0 && options.plat == 'taobao') {
+				document.title = util.GetPlatName(this.plat)
+				if(options.plat == 'taobao' && !options.q) {
 					options['cate_id'] = conf.allCate
 				}
 
@@ -307,13 +309,13 @@
 				this.$nextTick(() => {
 					this.scrollTop = 0
 				});
-				let params = this.productParams;
+				let params = {};
 				this.platAttrArr.forEach(item => {
 					if (item.isActive) {
 						params = {...params, ...item.params }
 					}
 				});
-				if(params.plat) {
+				if(this.plat) {
 					this.plat = params.plat
 				}
 				this.page = 1;
@@ -493,6 +495,9 @@
 			},
 			cateBtnSelected(index) {
 			  this.currentCateStr = '';
+				this.productCateList.forEach(item => {
+				  item.isActive = false
+				});
 				this.$set(this.productCateList[index], "isActive", !this.productCateList[index].isActive);
 				const productCateArr = [];
 				this.productCateList.forEach(item => {
@@ -549,12 +554,13 @@
 			  this.page = 1;
 			  this.productList = [];
 			  this.loading = true;
-			  this.productParams = { keyword: this.keyword };
 				this.getProductList();
 			},
 			// 获取商品列表
 			async getProductList(type) {
-				console.log(this.productParams)
+				if(this.keyword){
+					this.productParams.keyword = this.keyword;
+				}
 
 				if(this.plat == 'taobao') {
 					this.taobaoReq(type)
@@ -591,15 +597,15 @@
 				}
 				var range_list = {}
 				if (this.productParams.max_price){
-					range_list.range_to = parseInt(this.productParams.max_price)
-					range_list.range_id = 2
+					range_list.range_to = parseInt(this.productParams.max_price) * 100
+					range_list.range_id = 0
 				}
 				if (this.productParams.min_price){
-					range_list.range_from = parseInt(this.productParams.min_price)
-					range_list.range_id = 2
+					range_list.range_from = parseInt(this.productParams.min_price) * 100
+					range_list.range_id = 0
 				}
-				if(range_list.range_id) {
-					param.range_list = JSON.stringify(range_list)
+				if(range_list.range_to) {
+					param.range_list = JSON.stringify([range_list])
 				}
 				this.$http.pddGet('pdd.ddk.goods.search',param)
 					.then(async r => {

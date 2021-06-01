@@ -60,9 +60,22 @@ function BaseDodoRequest(method, params, callback) {
   });
 }
 
+function GetPlatName(plat) {
+	if(plat == 'pdd') {
+		return '拼多多'
+	} else if (plat == 'taobao') {
+		return '淘宝'
+	} else if (plat == 'jd') {
+		return '京东'
+	} else if (plat == 'wph') {
+		return '唯品会'
+	}
+	return ''
+}
 
 export default {
   BaseRequest: BaseRequest,
   BaseGetRequest: BaseGetRequest,
   BaseDodoRequest: BaseDodoRequest,
+	GetPlatName: GetPlatName,
 };

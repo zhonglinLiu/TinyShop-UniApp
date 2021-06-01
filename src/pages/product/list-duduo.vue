@@ -232,6 +232,7 @@
       ...mapMutations(['setCartNum']),
 			// 初始化数据
 			initData(options) {
+				document.title = '拼多多'
 			  let params = this.productParams;
 			  if (options.cate_id) {
 					params.cate_id = options.cate_id;

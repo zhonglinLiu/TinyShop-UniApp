@@ -51,12 +51,14 @@ var pddCate = [
 	{child:[], 'id':'10564', 'title':'精选爆品'},
 ]
 
+var cate_base_url = "https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/cate/";
+
 var pddRealCate = [
 	{id: "1", title: "服装", pid: "0", cover: null, level: "1", child: [
 		{id: "239", title: "男装", pid: "1", cover: null, level: "2", child: [
-			{id: "245", title: "衬衫", pid: "239", cover: null, level: "3", child: []},
-			{id: "246", title: "T恤", pid: "239", cover: null, level: "3", child: []},
-			{id: "248", title: "针织衫/毛衣", pid: "239", cover: null, level: "3", child: []},
+			{id: "245", title: "衬衫", pid: "239", cover: cate_base_url + '%E8%A1%AC%E8%A1%AB.png', level: "3", child: []},
+			{id: "246", title: "T恤", pid: "239", cover: cate_base_url + 'T%E6%81%A4.png', level: "3", child: []},
+			{id: "248", title: "针织衫/毛衣", pid: "239", cover: cate_base_url + '%E6%AF%9B%E8%A1%A3.png', level: "3", child: []},
 			{id: "7282", title: "风衣", pid: "239", cover: null, level: "3", child: []},
 			{id: "7283", title: "夹克", pid: "239", cover: null, level: "3", child: []},
 			{id: "7284", title: "棉裤", pid: "239", cover: null, level: "3", child: []},
@@ -66,13 +68,13 @@ var pddRealCate = [
 			{id: "7296", title: "西服/西裤", pid: "239", cover: null, level: "3", child: []},
 		]},
 		{id: "8439", title: "女装", pid: "1", cover: null, level: "2", child: [
-			{id: "8440", title: "T恤", pid: "8439", cover: null, level: "3", child: []},
-			{id: "8441", title: "半身裙", pid: "8439", cover: null, level: "3", child: []},
-			{id: "8443", title: "衬衫", pid: "8439", cover: null, level: "3", child: []},
-			{id: "8442", title: "背心吊带", pid: "8439", cover: null, level: "3", child: []},
+			{id: "8440", title: "T恤", pid: "8439", cover: cate_base_url + 'T%E6%81%A4.png', level: "3", child: []},
+			{id: "8441", title: "半身裙", pid: "8439", cover: cate_base_url + '%E5%8D%8A%E8%BA%AB%E8%A3%99.png', level: "3", child: []},
+			{id: "8443", title: "衬衫", pid: "8439", cover: cate_base_url + '%E8%A1%AC%E8%A1%AB.png', level: "3", child: []},
+			{id: "8442", title: "背心吊带", pid: "8439", cover: cate_base_url + '%E5%90%8A%E5%B8%A6.png', level: "3", child: []},
 			{id: "8447", title: "裤子", pid: "8439", cover: null, level: "3", child: []},
-			{id: "8449", title: "连衣裙", pid: "8439", cover: null, level: "3", child: []},
-			{id: "8452", title: "针织衫/毛衣", pid: "8439", cover: null, level: "3", child: []},
+			{id: "8449", title: "连衣裙", pid: "8439", cover: cate_base_url + '%E8%BF%9E%E8%A1%A3%E8%A3%99.png', level: "3", child: []},
+			{id: "8452", title: "针织衫/毛衣", pid: "8439", cover: cate_base_url + '%E6%AF%9B%E8%A1%A3.png', level: "3", child: []},
 			{id: "8453", title: "棉衣/棉服", pid: "8439", cover: null, level: "3", child: []},
 			{id: "8455", title: "牛仔裤", pid: "8439", cover: null, level: "3", child: []},
 			{id: "8460", title: "卫衣/绒衫", pid: "8439", cover: null, level: "3", child: []},
@@ -88,12 +90,12 @@ var pddRealCate = [
 		]},
 
 		{id: "8583", title: "内衣裤袜", pid: "1", cover: null, level: "2", child: [
-			{id: "8599", title: "睡衣/家居服套装", pid: "8583", cover: null, level: "2", child: []},
+			{id: "8599", title: "睡衣", pid: "8583", cover: null, level: "2", child: []},
 			{id: "8598", title: "睡裙", pid: "8583", cover: null, level: "2", child: []},
 			{id: "8584", title: "保暖裤", pid: "8583", cover: null, level: "2", child: []},
 			{id: "8585", title: "保暖上装", pid: "8583", cover: null, level: "2", child: []},
-			{id: "8606", title: "袜子/丝袜/打底裤袜", pid: "8583", cover: null, level: "2", child: []},
-			{id: "8589", title: "吊带/背心/T恤", pid: "8583", cover: null, level: "2", child: []},
+			{id: "8606", title: "丝袜/打底裤袜", pid: "8583", cover: null, level: "2", child: []},
+			{id: "8589", title: "吊带/T恤", pid: "8583", cover: null, level: "2", child: []},
 			{id: "8594", title: "内裤", pid: "8583", cover: null, level: "2", child: []},
 		]},
 	]},
@@ -129,12 +131,12 @@ var pddRealCate = [
 		{id: "6398", title: "零食/坚果/特产", pid: "4", cover: null, level: "1", child: [
 
 		]},
-		{id: "8172", title: "水产肉类/新鲜蔬果/熟食", pid: "4", cover: null, level: "1", child: [
+		{id: "8172", title: "水产肉类/新鲜蔬果", pid: "4", cover: null, level: "1", child: [
 
 		]},
 	]},
 	{id: "5", title: "美装", pid: "0", cover: null, level: "1", child: [
-		{id: "18482", title: "彩妆/香水/美妆工具", pid: "5", cover: null, level: "1", child: [
+		{id: "18482", title: "香水/美妆", pid: "5", cover: null, level: "1", child: [
 
 		]},
 		{id: "18574", title: "美容美体仪器", pid: "5", cover: null, level: "1", child: [
@@ -238,8 +240,8 @@ var selectCondition = [
 ]
 
 var allCate = '16,30,50020808,50012029,50006842,14'
-// var domain = 'https://mango.wehere.top'
-var domain = 'http://127.0.0.1:9015'
+var domain = 'https://mango.wehere.top'
+// var domain = 'http://127.0.0.1:9015'
 export default {
 	taobao_api:domain + '/taobaoke/openapi',
   taobao_transfor: domain + '/taobaoke/transfor',

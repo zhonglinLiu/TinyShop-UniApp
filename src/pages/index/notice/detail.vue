@@ -57,9 +57,7 @@ export default {
 		async getNotifyAnnounceView(id) {
 			this.loading = false;
 			this.announceDetail = data.notice_map[id]
-			uni.setNavigationBarTitle({
-				title: r.data.title
-			});
+			document.title = this.announceDetail.title
 			return
 			await this.$http
 				.get(`${notifyAnnounceView}`, { id })
