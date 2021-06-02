@@ -187,7 +187,7 @@ export default {
 			this.total_sales = '';
 			this.page = 1;
 			this.categoryProductList = [];
-			this.getProductList();
+			// this.getProductList();
 		},
 		stopPrevent() {},
 		// 规格弹窗开关
@@ -290,52 +290,51 @@ export default {
 		// 获取商品分类列表
 		async getProductCate(type) {
 			// this.$http.pddCateGet({'cat_id':8583})
-			await this.$http
-				.get(`${productCate}`)
-				.then(async r => {
-					if (type === 'refresh') {
-						uni.stopPullDownRefresh();
+			if (type === 'refresh') {
+				uni.stopPullDownRefresh();
+			}
+			// 获取分类广告图 注：广告图不是一级分类图
+			// await this.getAdvList();
+			// 过滤掉没有二级菜单的一级菜单
+			// r.data.forEach(item => {
+			// 	if (item.child.length > 0) {
+			// 		this.categoryList.push(item);
+			// 	}
+			// });
+			this.categoryList = conf.pddRealCate;
+			let cateId = uni.getStorageSync('indexToCateId');
+			if (cateId) {
+				this.categoryList.forEach((item, index) => {
+					if (cateId === item.id) {
+			      this.showCategoryIndex = index;
 					}
-					// 获取分类广告图 注：广告图不是一级分类图
-					await this.getAdvList();
-					// 过滤掉没有二级菜单的一级菜单
-					// r.data.forEach(item => {
-					// 	if (item.child.length > 0) {
-					// 		this.categoryList.push(item);
-					// 	}
-					// });
-					this.categoryList = conf.pddRealCate;
-					console.log(r.data)
-					console.log(conf.pddRealCate)
-					let cateId = uni.getStorageSync('indexToCateId');
-					if (cateId) {
-						this.categoryList.forEach((item, index) => {
-							if (cateId === item.id) {
-                this.showCategoryIndex = index;
-							}
-						});
-					} else {
-						if (this.styleCateType === 'one_two_product' && this.categoryList[0].child.length > 0) {
-							this.currentCateId = this.categoryList[0].child[0].id;
-						} else {
-							this.showCategoryIndex = 0;
-							this.currentCateId = this.categoryList && this.categoryList[0].id;
-						}
-					}
-					if (this.categoryList.length > 0) {
-						this.currentSecondCategoryList = this.categoryList[0].child;
-					}
-					this.page = 1;
-					this.categoryProductList = [];
-					await this.getProductList();
-					this.loading = false;
-				})
-				.catch(() => {
-					if (type === 'refresh') {
-						uni.stopPullDownRefresh();
-					}
-					this.loading = false;
 				});
+			} else {
+				if (this.styleCateType === 'one_two_product' && this.categoryList[0].child.length > 0) {
+					this.currentCateId = this.categoryList[0].child[0].id;
+				} else {
+					this.showCategoryIndex = 0;
+					this.currentCateId = this.categoryList && this.categoryList[0].id;
+				}
+			}
+			if (this.categoryList.length > 0) {
+				this.currentSecondCategoryList = this.categoryList[0].child;
+			}
+			this.page = 1;
+			this.categoryProductList = [];
+			// await this.getProductList();
+			this.loading = false;
+			// await this.$http
+			// 	.get(`${productCate}`)
+			// 	.then(async r => {
+
+			// 	})
+			// 	.catch(() => {
+			// 		if (type === 'refresh') {
+			// 			uni.stopPullDownRefresh();
+			// 		}
+			// 		this.loading = false;
+			// 	});
 		},
 		// 获取广告列表
 		async getAdvList() {
@@ -364,7 +363,7 @@ export default {
 			this.total_sales = '';
 			this.page = 1;
 			this.categoryProductList = [];
-			this.getProductList();
+			// this.getProductList();
 		},
 		handleSalesOrderByChange () {
 			if (this.categoryProductList.length === 0) return;
@@ -372,7 +371,7 @@ export default {
       this.total_sales = this.total_sales === 'asc' ? 'desc' : 'asc';
 			this.page = 1;
 			this.categoryProductList = [];
-      this.getProductList();
+      // this.getProductList();
 		},
 		handlePriceOrderByChange () {
 			if (this.categoryProductList.length === 0) return;
@@ -380,7 +379,7 @@ export default {
       this.price = this.price === 'asc' ? 'desc' : 'asc';
 			this.page = 1;
 			this.categoryProductList = [];
-      this.getProductList();
+      // this.getProductList();
 		},
 		// 获取产品列表
 		async getProductList() {
@@ -418,7 +417,7 @@ export default {
 		getMoreProductList () {
       if (this.loadingType === 'nomore' || this.categoryProductList.length === 0) return;
       this.page++;
-      this.getProductList();
+      // this.getProductList();
 		}
 	}
 };

@@ -1,7 +1,7 @@
 {
     "name" : "RF商城",
     "appid" : "", // 自行更换uniapp appid 可登录查看uniapp提供的用户统计 https://tongji.dcloud.net.cn/
-    "description" : "RF商城",
+    "description" : "淘券商城",
     "versionName" : "1.2.9",
     "versionCode" : 1,
     "transformPx" : false,
@@ -214,7 +214,7 @@
         "uniStatistics" : {
             "enable" : true
         },
-        "title" : "爱淘APP",
+        "title" : "淘券APP",
         "domain" : "app.where.top"
     },
     //页面js加载超时时间（超时后展示 error 对应的组件）

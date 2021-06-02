@@ -61,11 +61,11 @@
 					</swiper-item>
 				</swiper>
 				<!--新闻通知-->
-				<!-- <rf-swiper-slide v-if="announceList.length > 0" :list="announceList" class="rf-skeleton" @navTo="navTo('/pages/index/notice/notice')">
+				<rf-swiper-slide v-if="announceList.length > 0" :list="announceList" class="rf-skeleton" @navTo="navTo('/pages/index/notice/notice')">
 					<view slot="header" class="swiper-slide-header">
 						<text class="iconfont icongonggao" :class="'text-'+themeColor.name"></text>
 					</view>
-				</rf-swiper-slide> -->
+				</rf-swiper-slide>
 				<!-- 爆款推荐 -->
 				<!-- <view class="hot-recommend">
 					<view class="left">
@@ -175,7 +175,7 @@
 					'web_site_icp':'豫ICP备17025106号-2',
 					'copyright_desc':'Copyright 2021 hi.life@qq.com All rights reserved.'
 				}, // 商户配置
-				announceList: [], // 公告列表
+				announceList: homeData.notice_list, // 公告列表
 				share: {},
 				loading: true,
 				scrollTop: 0,
@@ -201,6 +201,16 @@
 		},
 		onPageScroll(e) {
 			this.scrollTop = e.scrollTop;
+		},
+		onLoad() {
+			this.$mHelper.baiduSeo()
+			this.$mHelper.setMeta('description', '淘宝优惠券，拼多多优惠券，京东优惠券，唯品会优惠券，优惠券，淘宝，拼多多，京东，唯品会，淘购')
+			this.$mHelper.setMeta('keywords', '汇集淘宝、拼多多、京东、唯品会等电商平台优惠券信息')
+			this.$mHelper.setMeta('author', 'Free，hi.life@qq.com')
+			this.$mHelper.setMeta('revisit-after', '2 days')
+			this.$mHelper.setMeta('copyright', 'hi.life@qq.com')
+			this.$mHelper.setMeta('applicable-device', 'mobile')
+			this.$mHelper.setMeta('theme-color', this.themeColor.color)
 		},
 		onShow() {
 			// 初始化购物车数量
@@ -438,7 +448,6 @@
 			},
 			// 首页参数赋值
 			initIndexData(data) {
-				this.announceList = homeData.home.announce;
 				this.productCateList = homeData.home.cate;
 				this.categoryList = [{ id: 0, title: '首页' }, ...conf.taobaoCate];
 				this.carouselList = {'index_top': homeData.home.top};

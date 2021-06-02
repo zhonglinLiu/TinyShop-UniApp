@@ -12,6 +12,7 @@
 
 <script>
 import { helperView } from '@/api/basic';
+import data from '@/data/index'
 export default {
 	data() {
 		return {
@@ -30,15 +31,18 @@ export default {
 			this.getHelperDetail();
 		},
 		async getHelperDetail() {
-			await this.$http.get(helperView, {
-				id: this.helperId
-			}).then(r => {
-				this.loading = false;
-				this.helperDetail = r.data;
-				uni.setNavigationBarTitle({ title: r.data.title });
-			}).catch(() => {
-				this.loading = false;
-			});
+			this.helperDetail = data.helpDetal[this.helperId]
+			// uni.setNavigationBarTitle({ title: this.helperDetail.title });
+			this.loading = false;
+			// await this.$http.get(helperView, {
+			// 	id: this.helperId
+			// }).then(r => {
+			// 	this.loading = false;
+			// 	this.helperDetail = r.data;
+			// 	uni.setNavigationBarTitle({ title: r.data.title });
+			// }).catch(() => {
+			// 	this.loading = false;
+			// });
 		}
 	}
 };

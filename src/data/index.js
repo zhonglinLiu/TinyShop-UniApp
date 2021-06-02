@@ -81,7 +81,8 @@ var notice_map = {
         "title": "关于本站",
         "merchant_id": 0,
         "content": "<p>本站是一个聚合了淘宝、拼多多、唯品会、京东等购物平台优惠信息的网站。开发此站的目的是希望大家都能更省钱的买到更好的东西。</p></br>" +
-					"<p>2021年5月30日： 本站1.0版本正式上线，支持查询淘宝、拼多多优惠信息 。</p>",
+					"<p>2021年05月30日： 本站1.0版本正式上线，支持查询淘宝、拼多多优惠信息 。</p>" + 
+					"<p>2021年06月03日： 增加14种主题色&修复若干bug。</p>" ,
         "cover": "",
         "synopsis": "今天消息是这样",
         "type": 1,
@@ -100,8 +101,46 @@ var notice_map = {
     }
 }
 
+var helpData = [
+	{
+			"id": "1",
+			"title": "如何联系作者?",
+			"pid": "0",
+			"level": "1",
+			"child": [
+					{
+							"id": "2",
+							"title": "联系作者",
+							"pid": "1",
+							"level": "2",
+							"child": []
+					}
+			]
+	},
+]
+
+var helpDetal = {
+	"2": {
+		"id": 48,
+		"member_id": 0,
+		"merchant_id": 0,
+		"title": "联系作者",
+		"content": "<p style=\"text-align: left;\">1、邮箱联系：hi.life@qq.com</p><p style=\"text-align: left;\">2、微信联系：FreeNeverFree</p>",
+		"sort": 990,
+		"level": 2,
+		"pid": 47,
+		"tree": "tr_0 tr_47 ",
+		"view": 0,
+		"status": 1,
+		"created_at": 1589965990,
+		"updated_at": 1604556815
+}
+}
+
 export default {
 	home:home,
 	notice_list:notice_list,
-	notice_map: notice_map
+	notice_map: notice_map,
+	helpData: helpData,
+	helpDetal: helpDetal,
 }

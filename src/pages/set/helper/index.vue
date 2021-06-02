@@ -21,6 +21,7 @@
 import { helperIndex } from '@/api/basic';
 import uniCollapse from '@/components/uni-collapse/uni-collapse.vue';
 import uniCollapseItem from '@/components/uni-collapse-item/uni-collapse-item.vue';
+import data from '@/data/index'
 export default {
 	components: { uniCollapse, uniCollapseItem },
 	data() {
@@ -44,11 +45,13 @@ export default {
 			this.$mRouter.push({ route });
 		},
 		async getHelperList() {
-			await this.$http.get(helperIndex).then(r => {
-				this.loading = false;
-				this.helperList = r.data;
-			});
+			this.helperList = data.helpData
 			this.loading = false;
+			// await this.$http.get(helperIndex).then(r => {
+			// 	this.loading = false;
+			// 	this.helperList = r.data;
+			// });
+			// this.loading = false;
 		}
 	}
 };

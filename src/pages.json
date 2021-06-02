@@ -161,7 +161,12 @@
 				{
 					"path": "set",
 					"style": {
-						"navigationBarTitleText": "设置"
+						"navigationBarTitleText": "设置",
+						"onReachBottomDistance": 50,
+						"app-plus": {
+							"bounce": "none",
+							"titleNView": false
+						}
 					}
 				},
 				// 授权管理
@@ -760,24 +765,24 @@
 				"selectedIconPath": "static/tab-cate-rf.png",
 				"text": "分类"
 			},
-			{
-				"pagePath": "pages/index/notice/notice",
-				"iconPath": "static/tab-notify.png",
-				"selectedIconPath": "static/tab-notify-rf.png",
-				"text": "消息"
-			}
+			// {
+			// 	"pagePath": "pages/index/notice/notice",
+			// 	"iconPath": "static/tab-notify.png",
+			// 	"selectedIconPath": "static/tab-notify-rf.png",
+			// 	"text": "消息"
+			// }
 			// {
 			// 	"pagePath": "pages/cart/cart",
 			// 	"iconPath": "static/tab-cart.png",
 			// 	"selectedIconPath": "static/tab-cart-rf.png",
 			// 	"text": "购物车"
 			// },
-			// {
-			// 	"pagePath": "pages/profile/profile",
-			// 	"iconPath": "static/tab-my.png",
-			// 	"selectedIconPath": "static/tab-my-rf.png",
-			// 	"text": "我的"
-			// }
+			{
+				"pagePath": "pages/set/set",
+				"iconPath": "static/tab-my.png",
+				"selectedIconPath": "static/tab-my-rf.png",
+				"text": "我的"
+			}
 		]
 	}
 }

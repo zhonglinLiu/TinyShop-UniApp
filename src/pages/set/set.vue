@@ -47,13 +47,13 @@
 				</view>
 			</view>
 		</view>
-		<view
+		<!-- <view
 			class="list-cell log-out-btn"
 			:class="'text-' + themeColor.name"
 			@tap="toLogout"
 		>
 			<text class="cell-tit">退出登录</text>
-		</view>
+		</view> -->
 		<!-- modal -->
 		<!-- 选择颜色模态框 -->
 		<view class="cu-modal" :class="{ show: colorModal }">
@@ -111,10 +111,10 @@ export default {
 		initData() {
 			this.user = uni.getStorageSync('user');
 			// 缓存大小
-			this.setList[5].content = `${uni.getStorageInfoSync().currentSize} kb`;
+			this.setList[0].content = `${uni.getStorageInfoSync().currentSize} kb`;
 			// #ifdef APP-PLUS
 			// eslint-disable-next-line
-			this.setList[8].content = `当前版本 ${plus.runtime.version}`;
+			this.setList[2].content = `当前版本 ${plus.runtime.version}`;
 			// #endif
 		},
 		// 通用跳转
@@ -126,7 +126,7 @@ export default {
 					success: e => {
 						if (e.confirm) {
 							uni.clearStorageSync();
-							this.setList[5].content = '0 kb';
+							this.setList[0].content = '0 kb';
 							this.$mStore.commit('login', this.user);
 							this.$mHelper.toast('清除缓存成功');
 						}

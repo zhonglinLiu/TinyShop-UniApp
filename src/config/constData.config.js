@@ -1,6 +1,6 @@
 export default {
 	// app应用名称
-	appName: '爱淘APP',
+	appName: '淘券APP',
 
 	// 购物车在tab的位置
 	cartIndex: 3,
@@ -74,28 +74,28 @@ export default {
 
 	// 设置-设置中心
 	setList: [
-		{
-			title: '个人资料',
-			url: '/pages/user/userinfo/userinfo',
-			content: ''
-		},
-		{
-			title: '修改密码',
-			url: '/pages/public/password?type=1',
-			content: ''
-		},
-		{
-			title: '授权管理',
-			url: '/pages/set/authorization/list',
-			content: ''
-		},
-		{
-			title: '发票管理',
-			url: '/pages/set/invoice/invoice',
-			content: '',
-			class: 'mT'
-		},
-		{ title: '开票历史', url: '/pages/set/invoice/list', content: '' },
+		// {
+		// 	title: '个人资料',
+		// 	url: '/pages/user/userinfo/userinfo',
+		// 	content: ''
+		// },
+		// {
+		// 	title: '修改密码',
+		// 	url: '/pages/public/password?type=1',
+		// 	content: ''
+		// },
+		// {
+		// 	title: '授权管理',
+		// 	url: '/pages/set/authorization/list',
+		// 	content: ''
+		// },
+		// {
+		// 	title: '发票管理',
+		// 	url: '/pages/set/invoice/invoice',
+		// 	content: '',
+		// 	class: 'mT'
+		// },
+		// { title: '开票历史', url: '/pages/set/invoice/list', content: '' },
 		{ title: '清除缓存', url: 'clearCache', content: '' },
 		{
 			title: '关于商城',

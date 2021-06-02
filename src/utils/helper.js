@@ -442,6 +442,30 @@ export default {
 			if (url) {
 				mRouter.push({ route: url });
 			}
-  }
-
+  },
+  baiduSeo() {
+	  (function(){
+		  var bp = document.createElement('script');
+		  var curProtocol = window.location.protocol.split(':')[0];
+		  if (curProtocol === 'https') {
+			  bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+		  }
+		  else {
+			  bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+		  }
+		  var s = document.getElementsByTagName("script")[0];
+		  s.parentNode.insertBefore(bp, s);
+	  })();
+  },
+	setMeta(name, content) {
+		var viewport = document.querySelector("meta[name="+name+"]");
+		if(viewport){
+			viewport.setAttribute('content', content);
+			return
+		}
+		var meta = document.createElement("meta")
+		meta.name = name
+		meta.content = content
+		document.querySelector("head").appendChild(meta)
+	}
 };
