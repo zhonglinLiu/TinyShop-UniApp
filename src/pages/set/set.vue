@@ -106,6 +106,9 @@ export default {
 		}
 		// #endif
 	},
+	onShow() {
+		this.$mHelper.setMeta('theme-color', this.themeColor.color)
+	},
 	methods: {
 		// 初始化数据
 		initData() {

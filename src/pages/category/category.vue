@@ -175,6 +175,9 @@ export default {
 	onLoad() {
 		this.initData();
 	},
+	onShow() {
+		this.$mHelper.setMeta('theme-color', this.themeColor.color)
+	},
 	methods: {
     moveHandle() {
     },
