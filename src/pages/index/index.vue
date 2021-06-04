@@ -213,7 +213,6 @@
 		},
 		onShow() {
 			// 初始化购物车数量
-			this.$mHelper.setMeta('theme-color', this.themeColor.color)
 			this.setCartNum(uni.getStorageSync('cartNum'));
 			this.initData();
 		},

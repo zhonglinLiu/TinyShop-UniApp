@@ -168,6 +168,7 @@ export default {
 			this.colorModal = false;
 			this.themeColor = item;
 			this.$mStore.commit('setThemeColor', item);
+			this.$mHelper.setMeta('theme-color', item.color)
 		}
 	}
 };
