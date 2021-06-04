@@ -89,7 +89,7 @@ export default {
       if (this.userInfo.promo_code) {
         this.currentUrl = `${host}/pages/product/product?id=${this.productId}&promo_code=${this.userInfo.promo_code}`;
       } else {
-        this.currentUrl = `${host}/pages/product/product?id=${this.productId}&plat=${this.plat}`;
+        this.currentUrl = `${host}/pages/product/pdd-product?id=${this.productId}&plat=${this.plat}`;
       }
 			this.hasLogin = this.$mStore.getters.hasLogin;
 			await this.getProductDetail();

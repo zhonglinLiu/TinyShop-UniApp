@@ -71,6 +71,7 @@ export default {
 	},
 	async onLoad(options) {
 		this.productId = options.id;
+		this.plat = options.plat;
 		this.userInfo = uni.getStorageSync('userInfo') || {};
 		await this.initData();
 	},

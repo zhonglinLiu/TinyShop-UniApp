@@ -14,14 +14,14 @@ var announce = [
 
 var banner_url = 'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/banners/'
 var top = [
-	{'id':1,'cover':banner_url + 'tiaomao618-banner.jpg',
-	'jump_type':'', 'jump_link':'https://s.click.taobao.com/VRMn3nu', 'title':'天猫618'},
-	{'id':2,'cover':banner_url + 'yiyuangou.jpg',
-	'jump_type':'','jump_link':'https://s.click.taobao.com/2uIk3nu', 'title':'限量一元购'},
 	{'id':3,'cover':banner_url + 'duoduo-qianwanbutie.jpg',
 	'jump_type':'','jump_link':'https://p.pinduoduo.com/WjAFubZf', 'title':'千万补贴 百万爆款'},
 	{'id':4,'cover':banner_url + 'duoduo-huili.jpg',
-	'jump_type':'','jump_link':'https://p.pinduoduo.com/AgmFuWWC', 'title':'回力多多品牌日'}
+	'jump_type':'','jump_link':'https://p.pinduoduo.com/AgmFuWWC', 'title':'回力多多品牌日'},
+	{'id':1,'cover':banner_url + 'tiaomao618-banner.jpg',
+	'jump_type':'', 'jump_link':'https://s.click.taobao.com/VRMn3nu', 'title':'天猫618'},
+	{'id':2,'cover':banner_url + 'yiyuangou.jpg',
+	'jump_type':'','jump_link':'https://s.click.taobao.com/2uIk3nu', 'title':'限量一元购'}
 ]
 
 var search = {

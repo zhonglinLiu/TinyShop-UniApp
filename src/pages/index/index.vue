@@ -210,6 +210,7 @@
 			this.$mHelper.setMeta('revisit-after', '2 days')
 			this.$mHelper.setMeta('copyright', 'hi.life@qq.com')
 			this.$mHelper.setMeta('applicable-device', 'mobile')
+			this.$mHelper.setMeta('theme-color', this.themeColor.color)
 		},
 		onShow() {
 			// 初始化购物车数量

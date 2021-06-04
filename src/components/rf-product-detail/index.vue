@@ -439,7 +439,7 @@
       }).then(() => {
         return {
           title: this.productDetail.name,
-          path: `/pages/product/product?id=${this.productId}`
+          path: window.location.pathname + window.location.search
         };
       });
       // #endif
@@ -534,7 +534,7 @@
         if (this.$mPayment.isWechat()) {
           this.shareClass = 'show';
         } else {
-          this.$mHelper.h5Copy(this.product.name + '  ' + this.url);
+          this.$mHelper.h5Copy(this.product.name + '  ' + window.location.href);
         }
         // #endif
         // #ifdef a

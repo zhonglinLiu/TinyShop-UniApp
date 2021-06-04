@@ -169,6 +169,13 @@ export default {
 			this.themeColor = item;
 			this.$mStore.commit('setThemeColor', item);
 			this.$mHelper.setMeta('theme-color', item.color)
+			item.tabList && item.tabList.forEach((selectedIconPath, index) => {
+				uni.setTabBarItem({
+					index,
+					selectedIconPath
+				});
+			});
+			uni.setTabBarStyle({selectedColor: this.themeColor.color,borderStyle: 'white'});
 		}
 	}
 };
