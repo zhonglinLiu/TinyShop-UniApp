@@ -9,6 +9,7 @@ import $mPayment from '@/utils/payment';
 // #endif
 import { http } from '@/utils/request';
 import { advView } from '@/api/basic';
+import conf from './conf'
 //常用方法集合
 export default {
 	/**
@@ -395,7 +396,6 @@ export default {
   // 广告图跳转封装
   handleBannerNavTo(data, id, advId) {
 			let url;
-			http.get(advView, { id: advId });
 			switch (data) {
 				case 'notify_announce_view': // 公告详情
 					url = `/pages/index/notice/detail?id=${id}`;
@@ -436,6 +436,22 @@ export default {
 					// #endif
 					break;
 				default:
+					if(!document) {
+						uni.setClipboardData({
+							data: id,
+							success: function () {
+								uni.showToast({
+									icon: 'none',
+									title: '已复制链接地址,请到浏览器中打开',
+									duration: 2000
+								});
+							},
+							fail: function(err) {
+								console.error(err)
+							}
+						})
+						return
+					}
 					window.open(id)
 					return
 			}
@@ -444,6 +460,9 @@ export default {
 			}
   },
   baiduSeo() {
+		if(document == undefined) {
+			return
+		}
 	  (function(){
 		  var bp = document.createElement('script');
 		  var curProtocol = window.location.protocol.split(':')[0];
@@ -458,6 +477,13 @@ export default {
 	  })();
   },
 	setMeta(name, content) {
+		if (document == undefined) {
+			return
+		}
+		if(name == 'title') {
+			document.title = content
+			return
+		}
 		var viewport = document.querySelector("meta[name="+name+"]");
 		if(viewport){
 			viewport.setAttribute('content', content);
@@ -467,5 +493,14 @@ export default {
 		meta.name = name
 		meta.content = content
 		document.querySelector("head").appendChild(meta)
+	},
+	getDomain() {
+		var host
+		if(document) {
+			host = 'https://' + document.domain
+		} else {
+			host = conf.http_host
+		}
+		return host
 	}
 };

@@ -31,18 +31,18 @@ export default {
 				  urlType: 'tab',
 				  url: '/pages/category/category'
 				},
-				{
-					icon: 'iconxiaoxi1',
-					text: '消息',
-				  urlType: 'tab',
-				  url: '/pages/index/notice/notice'
-				},
 				// {
-				// 	icon: 'iconwode-',
-				// 	text: '我的',
-    //       urlType: 'tab',
-    //       url: '/pages/profile/profile'
+				// 	icon: 'iconxiaoxi1',
+				// 	text: '消息',
+				//   urlType: 'tab',
+				//   url: '/pages/index/notice/notice'
 				// },
+				{
+					icon: 'iconwode-',
+					text: '我的',
+          urlType: 'tab',
+          url: '/pages/set/set'
+				},
 				// {
 				// 	icon: 'icongouwuche2',
 				// 	text: '购物车',

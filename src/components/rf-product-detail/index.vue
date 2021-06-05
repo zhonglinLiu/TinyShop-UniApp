@@ -93,7 +93,7 @@
 			<!--商品参数-->
 			<view class="c-list">
 				<!--商品库存-->
-				<rf-item-popup
+				<!-- <rf-item-popup
 					title="商品库存"
 					v-if="parseInt(product.is_stock_visible, 10) == 1"
 					:isEmpty="parseInt(currentStock, 10) === 0"
@@ -102,16 +102,14 @@
 					<view slot="content">
 						{{ currentStock || product.stock || 0 }} {{ product.unit || '件' }}
 					</view>
-				</rf-item-popup>
-				<!--满减送-->
-				<!--满包邮-->
+				</rf-item-popup> -->
 				<!-- <rf-item-popup
 					v-if="product.fullMail && product.fullMail.is_open === '1' && product.shipping_type !== '1'"
 					title="是否包邮"
-				> -->
+				>
 					<view slot="content" :class="'text-' + themeColor.name">{{ product.free_shipment == 1 ? '包邮' : '包邮' }}</view>
 				</rf-item-popup>
-
+ -->
 				<rf-item-popup
 					v-if="product.play_info"
 					title="优惠信息"
@@ -433,13 +431,17 @@
 		},
 		async onShareAppMessage () {
       // #ifdef MP
+			var path = '/page/product/product?id=${this.productId}'
+			if(this.plat == 'pdd') {
+				var path = path + '&plat=pdd'
+			}
       await this.$http.post(`${transmitCreate}`, {
         topic_type: 'product',
         topic_id: this.productId
       }).then(() => {
         return {
           title: this.productDetail.name,
-          path: window.location.pathname + window.location.search
+          path: path
         };
       });
       // #endif
@@ -730,9 +732,11 @@
 			openPdd() {
 				var that = this;
 				this.loading = true;
+
 				this.$http.pddGet('pdd.ddk.goods.promotion.url.generate',{
 					'search_id': that.product.search_id,
-					'goods_sign_list': JSON.stringify([that.product.goods_sign])
+					'goods_sign_list': JSON.stringify([that.product.goods_sign]),
+					'generate_we_app': wx ? true : false,
 				})
 				.then(async r => {
 					console.log(r.data)
@@ -752,6 +756,13 @@
 						return
 					}
 					var data = r.data.goods_promotion_url_generate_response.goods_promotion_url_list[0]
+					if(!document) {
+						uni.navigateToMiniProgram({
+							appId: data.we_app_info.app_id,
+							path: data.we_app_info.page_path
+						})
+						return
+					}
 					uni.showModal({
 						title:'即将打开“拼多多”',
 						success:function(e) {
@@ -789,25 +800,18 @@
 					})
 					.then(async r => {
 						var data = r.data.tbk_tpwd_create_response.data
-						let clipboard = new Clipboard('.copy-btn', {
-							text: function() {
-								return data
+						uni.setClipboardData({
+							data: data.model,
+							success: function () {
+								uni.showToast({
+									icon: 'none', // success / none / loading 3个有效参数
+									title: '复制成功,请打开淘宝购买',
+									duration: 2000
+								});
+							},
+							fail: function(err) {
+								console.error(err)
 							}
-						})
-						console.log(this.product)
-						clipboard.on('success', function(e) {
-							console.info('Action:', e.action);
-							console.info('Text:', e.text); //复制的文本内容
-							e.clearSelection(); //清除选中的文字的选择状态
-							uni.showToast({
-								icon: 'success', // success / none / loading 3个有效参数
-								title: '复制成功,请打开淘宝购买',
-								duration: 2000
-							});
-						});
-						clipboard.on('error', function (e) {
-							console.error('Action:', e.action);
-							console.error('Trigger:', e.trigger);
 						})
 					})
 					.catch(err => {

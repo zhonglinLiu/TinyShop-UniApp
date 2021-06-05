@@ -241,6 +241,9 @@
 			if(options.plat) {
 				this.plat = options.plat
 			}
+			if(options.keyword) {
+				this.keyword = options.keyword
+			}
 			this.initData(options);
 		},
 		// 下拉刷新
@@ -259,13 +262,15 @@
       ...mapMutations(['setCartNum']),
 			// 初始化数据
 			initData(options) {
-				this.keyword = options.keyword
 				if(options.plat){
 					this.plat = options.plat
 				} else {
 					this.plat = 'taobao'
 				}
-				document.title = util.GetPlatName(this.plat)
+				if(this.keyword) {
+					options.keyword = this.keyword
+				}
+				this.$mHelper.setMeta('title', util.GetPlatName(this.plat))
 				if(options.plat == 'taobao' && !options.q) {
 					options['cate_id'] = conf.allCate
 				}
@@ -462,7 +467,7 @@
 			},
 			closeDrawer() {
 				this.drawer = false;
-			  var params = this.productParams;
+			  var params = {}
 			  if (this.maxPrice) {
 			    params.max_price = this.maxPrice;
 			  }

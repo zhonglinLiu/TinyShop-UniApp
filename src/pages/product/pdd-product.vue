@@ -85,7 +85,7 @@ export default {
 		},
 		// 数据初始化
 		async initData() {
-			var host = 'https://' + document.domain
+			var host = this.$mHelper.getDomain()
       if (this.userInfo.promo_code) {
         this.currentUrl = `${host}/pages/product/product?id=${this.productId}&promo_code=${this.userInfo.promo_code}`;
       } else {
@@ -103,6 +103,7 @@ export default {
 				.then(async r => {
 					var data = r.data.goods_detail_response.goods_details
 					this.productDetail = trans.pddDetail(data[0]);
+					console.log(this.productDetail)
 					uni.setNavigationBarTitle({ title: this.productDetail.name });
 					await this.$mHelper.handleWxH5Share(this.appName, this.productDetail.name, this.currentUrl, this.productDetail.picture);
 					this.loading = false;

@@ -72,7 +72,9 @@ var pddServiceMap = {
 function pddService(tags) {
 	var res = []
 	for(var k in tags) {
-		res.push(pddServiceMap[tags[k]])
+		if(pddServiceMap[tags[k]]) {
+			res.push(pddServiceMap[tags[k]])
+		}
 	}
 	return res
 }

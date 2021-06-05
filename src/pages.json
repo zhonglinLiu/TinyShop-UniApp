@@ -86,6 +86,17 @@
 				}
 			}
 		},
+		{
+			"path": "pages/index/set",
+			"style": {
+				"navigationBarTitleText": "我的",
+				"onReachBottomDistance": 50,
+				"app-plus": {
+					"bounce": "none",
+					"titleNView": false
+				}
+			}
+		},
 		// 分类
 		{
 			"path": "pages/category/category",
@@ -778,7 +789,7 @@
 			// 	"text": "购物车"
 			// },
 			{
-				"pagePath": "pages/set/set",
+				"pagePath": "pages/index/set",
 				"iconPath": "static/tab-my.png",
 				"selectedIconPath": "static/tab-my-rf.png",
 				"text": "我的"

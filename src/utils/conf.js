@@ -243,6 +243,7 @@ var allCate = '16,30,50020808,50012029,50006842,14'
 var domain = 'https://mango.wehere.top'
 // var domain = 'http://127.0.0.1:9015'
 export default {
+	http_host : 'http://liu-web-static.oss-cn-shanghai.aliyuncs.com',
 	taobao_api:domain + '/taobaoke/openapi',
   taobao_transfor: domain + '/taobaoke/transfor',
 	tkl_api: domain + '/taobaoke/tkl',

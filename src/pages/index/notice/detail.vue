@@ -57,7 +57,7 @@ export default {
 		async getNotifyAnnounceView(id) {
 			this.loading = false;
 			this.announceDetail = data.notice_map[id]
-			document.title = this.announceDetail.title
+			this.$mHelper.setMeta('title', this.announceDetail.title)
 			return
 			await this.$http
 				.get(`${notifyAnnounceView}`, { id })

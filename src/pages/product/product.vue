@@ -82,7 +82,7 @@ export default {
 		},
 		// 数据初始化
 		async initData() {
-			var host = 'https://' + document.domain
+			var host = this.$mHelper.getDomain()
       if (this.userInfo.promo_code) {
         this.currentUrl = `${host}/pages/product/product?id=${this.productId}&promo_code=${this.userInfo.promo_code}`;
       } else {
@@ -96,7 +96,7 @@ export default {
 			var data = uni.getStorageSync('product_id:' + this.productId);
 			if(data) {
 				this.productDetail = trans.taobaoDetail(data);
-				document.title = this.productDetail.name
+				this.$mHelper.setMeta('title', this.productDetail.name)
 				this.loading = false;
 				return
 			}
@@ -111,7 +111,7 @@ export default {
 						this.productDetail = trans.taobaoDetail(data);
 						// uni.setNavigationBarTitle({ title: this.productDetail.name });
 						await this.$mHelper.handleWxH5Share(this.appName, this.productDetail.name, this.currentUrl, this.productDetail.picture);
-						document.title = this.productDetail.name
+						this.$mHelper.setMeta('title', this.productDetail.name)
 						this.loading = false;
 					}).catch(err => {
 						this.loading = false;

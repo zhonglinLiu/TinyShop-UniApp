@@ -79,7 +79,7 @@ export default {
 	methods: {
 		// 数据初始化
 		initData() {
-			document.title = '公告'
+			this.$mHelper.setMeta('title', '公告')
 			this.getNotifyAnnounceIndex();
 		},
 		// 获取通知列表

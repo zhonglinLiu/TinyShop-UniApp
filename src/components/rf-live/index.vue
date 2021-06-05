@@ -24,7 +24,7 @@ export default {
     };
   },
 	async created() {
-		await this.getLiveList();
+		// await this.getLiveList();
 	},
 	// 销毁定时器
 	beforeDestroy () {

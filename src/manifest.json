@@ -1,5 +1,5 @@
 {
-    "name" : "RF商城",
+    "name" : "淘券商城",
     "appid" : "", // 自行更换uniapp appid 可登录查看uniapp提供的用户统计 https://tongji.dcloud.net.cn/
     "description" : "淘券商城",
     "versionName" : "1.2.9",
@@ -177,7 +177,7 @@
     "mp-weixin" : {
         /* 小程序特有相关 */
         "usingComponents" : true,
-        "appid" : "",
+        "appid" : "wx3e75315e0449803b",
         // 这里添加微信小程序appid
         "setting" : {
             "urlCheck" : true,
