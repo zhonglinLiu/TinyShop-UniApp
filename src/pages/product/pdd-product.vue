@@ -67,6 +67,21 @@ export default {
 		}
 	},
 	// #endif
+	onShareAppMessage() {
+		return uni.showShareMenu({
+			title: this.appName,
+			content: this.productDetail.title,
+			imageUrl:this.productDetail.picture,
+			path: '/page/product/pdd-product?id=' + this.productId + '&plat=pdd'
+		})
+	},
+	onShareTimeline() {
+		return {
+			title: this.appName,
+			query: 'id=' + this.productId + '&plat=pdd',
+			imageUrl: this.productDetail.picture,
+		}
+	},
 	onPageScroll(e) {
 		this.scrollTop = e.scrollTop;
 	},

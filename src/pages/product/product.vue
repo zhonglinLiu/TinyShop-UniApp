@@ -66,6 +66,21 @@ export default {
 		}
 	},
 	// #endif
+	onShareAppMessage() {
+		return uni.showShareMenu({
+			title: this.appName,
+			content: this.productDetail.title,
+			imageUrl:this.productDetail.picture,
+			path: '/page/product/product?id=' + this.productId + '&plat=taobao'
+		})
+	},
+	onShareTimeline() {
+		return {
+			title: this.appName,
+			query: 'id=' + this.productId + '&plat=taobao',
+			imageUrl: this.productDetail.picture,
+		}
+	},
 	onPageScroll(e) {
 		this.scrollTop = e.scrollTop;
 	},
@@ -113,7 +128,8 @@ export default {
 						await this.$mHelper.handleWxH5Share(this.appName, this.productDetail.name, this.currentUrl, this.productDetail.picture);
 						this.$mHelper.setMeta('title', this.productDetail.name)
 						this.loading = false;
-					}).catch(err => {
+					})
+					.catch(err => {
 						this.loading = false;
 						this.errorInfo = err;
 					});

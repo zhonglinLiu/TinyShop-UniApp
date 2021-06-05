@@ -41,7 +41,7 @@ export default {
 					icon: 'iconwode-',
 					text: '我的',
           urlType: 'tab',
-          url: '/pages/set/set'
+          url: '/pages/index/set'
 				},
 				// {
 				// 	icon: 'icongouwuche2',

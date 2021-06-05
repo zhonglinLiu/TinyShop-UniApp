@@ -26,7 +26,8 @@ import rfTag from '@/components/rf-tag';
 import rfNavDetail from '@/components/rf-nav-detail';
 import cuCustom from '@/components/cu-custom';
 import rfBackHome from '@/components/rf-back-home';
-
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 // 网络状态监听
 uni.getNetworkType({
 	success: res => {

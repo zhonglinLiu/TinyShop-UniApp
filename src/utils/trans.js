@@ -23,31 +23,6 @@ function paddList(items, search_id) {
 	return ress
 }
 
-function taobaoList(items) {
-	var ress = []
-	for (var i in items) {
-		var res = {
-			'shipping_type':items[i].maochao_play_free_post_fee,
-			'cost_price':items[i].coupon_amount,
-			'id':items[i].item_id,
-			'name':items[i].title,
-			'price':items[i].zk_final_price,
-			'sketch':items[i].item_description,
-			'total_sales':items[i].volume,
-			'picture': items[i].pict_url,
-			'coupon_price': items[i].coupon_amount,
-		}
-		if (items[i].small_images && items[i].small_images.string) {
-			res.images = items[i].small_images.string
-		}
-		for(var k in items[i]) {
-			res[k] = items[i][k]
-		}
-		ress.push(res)
-	}
-	return ress
-}
-
 function pdd_mall_type(type) {
 	if(type==1) {
 		return '个人'
@@ -84,6 +59,7 @@ function pddDetail(item) {
 		'price': price,
 		'palt': 'pdd',
 		'pict_url': item.goods_image_url,
+		'productId': item.good_id,
 		'name': item.goods_name,
 		'sketch': '',
 		'shipping_type': 1,
@@ -94,7 +70,7 @@ function pddDetail(item) {
 		'nick': item.mall_name,
 		// 'provcity': item.provcity,
 		// 'item_url': item.item_url,
-		'picture':item.pict_url,
+		'picture':item.goods_image_url,
 		'tags':pddService(item.service_tags),
 		'attributeValue':[
 			{'title':'平台', 'value':'拼多多'},
@@ -113,6 +89,31 @@ function pddDetail(item) {
 		res[k] = item[k]
 	}
 	return res
+}
+
+function taobaoList(items) {
+	var ress = []
+	for (var i in items) {
+		var res = {
+			'shipping_type':items[i].maochao_play_free_post_fee,
+			'cost_price':items[i].coupon_amount,
+			'id':items[i].item_id,
+			'name':items[i].title,
+			'price':items[i].zk_final_price,
+			'sketch':items[i].item_description,
+			'total_sales':items[i].volume,
+			'picture': items[i].pict_url,
+			'coupon_price': items[i].coupon_amount,
+		}
+		if (items[i].small_images && items[i].small_images.string) {
+			res.images = items[i].small_images.string
+		}
+		for(var k in items[i]) {
+			res[k] = items[i][k]
+		}
+		ress.push(res)
+	}
+	return ress
 }
 function taobaoDetail(item) {
 	item.zk_final_price = parseFloat(item.zk_final_price)
@@ -134,8 +135,8 @@ function taobaoDetail(item) {
 	}
 	var res = {
 		'price': item.zk_final_price,
-		'pict_url': item.pict_url,
 		'name': item.title,
+		'productId': item.item_id,
 		'sketch': '',
 		'shipping_type': item.free_shipment ? 1: 2,
 		'point_exchange_type':'1',
@@ -144,14 +145,13 @@ function taobaoDetail(item) {
 		'covers': item.small_images.string,
 		'nick': item.nick,
 		'provcity': item.provcity,
-		'item_url': item.item_url,
-		'picture':item.pict_url,
 		'tags':tags,
 		'attributeValue':attrs,
 		'base_attribute_format':[{'title':'颜色？','show_type':2}],
 		'minSkuPrice':item.zk_final_price,
 		'maxSkuPrice': item.zk_final_price,
 		'market_price': item.zk_final_price,
+		'picture': item.pict_url,
 	}
 	for(var k in item) {
 		res[k] = item[k]
@@ -185,6 +185,26 @@ function taobaoDetail(item) {
 	if(item.kuadian_promotion_info) {
 		res['kuadian_promotion_info'] = item.kuadian_promotion_info
 	}
+	var url = res.coupon_share_url
+	if(url.indexOf("https") == -1) {
+		if(url.indexOf("http") != -1) {
+			url = url.replace('http', 'https');
+		} else {
+			url = url.replace('//uland.', 'https://uland.'),
+			url = url.replace('//s.click', 'https://s.click');
+		}
+	}
+	res.coupon_share_url = url
+
+	var url = res.picture
+	if(url.indexOf("https") == -1) {
+		if(url.indexOf("http") != -1) {
+			url = url.replace('http', 'https');
+		} else {
+			url = url.replace('//img.', 'https://img.');
+		}
+	}
+	res.picture = url
 	console.log(res)
 	return res
 }

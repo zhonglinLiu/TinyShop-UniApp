@@ -436,23 +436,23 @@ export default {
 					// #endif
 					break;
 				default:
-					if(!document) {
-						uni.setClipboardData({
-							data: id,
-							success: function () {
-								uni.showToast({
-									icon: 'none',
-									title: '已复制链接地址,请到浏览器中打开',
-									duration: 2000
-								});
-							},
-							fail: function(err) {
-								console.error(err)
-							}
-						})
-						return
-					}
+					// #ifdef H5
 					window.open(id)
+					return
+					// #endif
+					uni.setClipboardData({
+						data: id,
+						success: function () {
+							uni.showToast({
+								icon: 'none',
+								title: '已复制链接地址,请到浏览器中打开',
+								duration: 2000
+							});
+						},
+						fail: function(err) {
+							console.error(err)
+						}
+					})
 					return
 			}
 			if (url) {
@@ -460,9 +460,9 @@ export default {
 			}
   },
   baiduSeo() {
-		if(document == undefined) {
-			return
-		}
+		// #ifndef H5
+		return
+		// #endif
 	  (function(){
 		  var bp = document.createElement('script');
 		  var curProtocol = window.location.protocol.split(':')[0];
@@ -477,9 +477,9 @@ export default {
 	  })();
   },
 	setMeta(name, content) {
-		if (document == undefined) {
-			return
-		}
+		// #ifndef H5
+		return
+		// #endif
 		if(name == 'title') {
 			document.title = content
 			return
@@ -496,11 +496,12 @@ export default {
 	},
 	getDomain() {
 		var host
-		if(document) {
-			host = 'https://' + document.domain
-		} else {
-			host = conf.http_host
-		}
+		// #ifdef H5
+		host = 'https://' + document.domain
+		// #endif
+		// #ifndef H5
+		host = conf.http_host
+		// #endif
 		return host
 	}
 };

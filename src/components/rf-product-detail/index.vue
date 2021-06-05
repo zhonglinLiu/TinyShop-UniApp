@@ -283,7 +283,7 @@
 						:disabled="addCartBtnDisabled"
 						class="action-btn copy-btn"
 						:class="'bg-' + themeColor.name"
-						@tap="crateTaoKouLing()"
+						@click="crateTaoKouLing($event)"
 					>
 						淘口令购买
 					</button>
@@ -344,7 +344,6 @@
 	import { collectCreate, collectDel, pickupPointIndex, transmitCreate } from '@/api/basic';
   import { couponReceive, addressList } from '@/api/userInfo';
 	import { mapMutations } from 'vuex';
-	import Clipboard from 'clipboard';
 
   export default {
     name: 'rfProductDetail',
@@ -536,7 +535,7 @@
         if (this.$mPayment.isWechat()) {
           this.shareClass = 'show';
         } else {
-          this.$mHelper.h5Copy(this.product.name + '  ' + window.location.href);
+          this.$mHelper.h5Copy(window.location.href + ' ' + this.product.name);
         }
         // #endif
         // #ifdef a
@@ -756,13 +755,13 @@
 						return
 					}
 					var data = r.data.goods_promotion_url_generate_response.goods_promotion_url_list[0]
-					if(!document) {
-						uni.navigateToMiniProgram({
-							appId: data.we_app_info.app_id,
-							path: data.we_app_info.page_path
-						})
-						return
-					}
+					// #ifdef MP-WEIXIN
+					uni.navigateToMiniProgram({
+						appId: data.we_app_info.app_id,
+						path: data.we_app_info.page_path
+					})
+					return
+					// #endif
 					uni.showModal({
 						title:'即将打开“拼多多”',
 						success:function(e) {
@@ -777,20 +776,9 @@
 					this.errorInfo = err;
 				});
 			},
-			crateTaoKouLing() {
+			crateTaoKouLing(event) {
 				this.loading = true;
 				var url = this.product.coupon_share_url
-				if (!url) {
-					url = this.product.url
-				}
-				if(url.indexOf("https") == -1) {
-					if(url.indexOf("http") != -1) {
-						url = url.replace('http', 'https');
-					} else {
-						url = url.replace('//uland.', 'https://uland.'),
-						url = url.replace('//s.click', 'https://s.click');
-					}
-				}
 				var that = this;
 				this.$http
 					.taoGet(`taobao.tbk.tpwd.create`, {
@@ -800,6 +788,7 @@
 					})
 					.then(async r => {
 						var data = r.data.tbk_tpwd_create_response.data
+						// #ifndef H5
 						uni.setClipboardData({
 							data: data.model,
 							success: function () {
@@ -813,6 +802,22 @@
 								console.error(err)
 							}
 						})
+						// #endif
+						// #ifdef H5
+						this.$copyText(data.model).then(function(e) {
+							uni.showToast({
+								icon: 'none', // success / none / loading 3个有效参数
+								title: '复制成功,请打开淘宝购买',
+								duration: 2000
+							});
+						},function(e) {
+							uni.showToast({
+								icon: 'none', // success / none / loading 3个有效参数
+								title: '复制失败,请重试',
+								duration: 2000
+							});
+						})
+						// #endif
 					})
 					.catch(err => {
 						this.loading = false;
