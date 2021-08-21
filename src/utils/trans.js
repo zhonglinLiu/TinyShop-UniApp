@@ -142,7 +142,7 @@ function taobaoDetail(item) {
 		'point_exchange_type':'1',
 		'total_sales': item.volume,
 		'address_name': item.provcity,
-		'covers': item.small_images.string,
+		'covers': item.small_images ? item.small_images.string : [item.pict_url],
 		'nick': item.nick,
 		'provcity': item.provcity,
 		'tags':tags,

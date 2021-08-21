@@ -125,7 +125,6 @@ export default {
 						data['coupon'] = r.data.result.data
 						this.productDetail = trans.taobaoDetail(data);
 						// uni.setNavigationBarTitle({ title: this.productDetail.name });
-						await this.$mHelper.handleWxH5Share(this.appName, this.productDetail.name, this.currentUrl, this.productDetail.picture);
 						this.$mHelper.setMeta('title', this.productDetail.name)
 						this.loading = false;
 					})

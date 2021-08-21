@@ -120,13 +120,12 @@ export default {
 					this.productDetail = trans.pddDetail(data[0]);
 					console.log(this.productDetail)
 					uni.setNavigationBarTitle({ title: this.productDetail.name });
-					await this.$mHelper.handleWxH5Share(this.appName, this.productDetail.name, this.currentUrl, this.productDetail.picture);
 					this.loading = false;
 				})
-				// .catch(err => {
-				// 	this.loading = false;
-				// 	this.errorInfo = err;
-				// });
+				.catch(err => {
+					this.loading = false;
+					this.errorInfo = err;
+				});
 		}
 	}
 };

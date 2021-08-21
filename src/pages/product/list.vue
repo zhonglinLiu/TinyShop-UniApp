@@ -584,6 +584,9 @@
 				if(this.productParams.cate_id) {
 					param.cat_id = this.productParams.cate_id
 				}
+				if(this.productParams.keyword){
+					param.keyword = this.productParams.keyword
+				}
 				if(this.productParams.price){
 					if(this.productParams.price == "desc") {
 						param.sort_type = 4
@@ -597,17 +600,16 @@
 						param.sort_type = 5
 					}
 				}
-				if(this.productParams.keyword){
-					param.keyword = this.productParams.keyword
-				}
 				var range_list = {}
 				if (this.productParams.max_price){
 					range_list.range_to = parseInt(this.productParams.max_price) * 100
 					range_list.range_id = 0
+					delete param['keyword']
 				}
 				if (this.productParams.min_price){
 					range_list.range_from = parseInt(this.productParams.min_price) * 100
 					range_list.range_id = 0
+					delete param['keyword']
 				}
 				if(range_list.range_to) {
 					param.range_list = JSON.stringify([range_list])
@@ -643,6 +645,9 @@
 				if(this.productParams.cate_id) {
 					param.cat = this.productParams.cate_id
 				}
+				if (!this.productParams.cate_id && !this.productParams.keyword) {
+					param.cat = conf.allCate
+				}
 				if(this.productParams.price){
 					if(this.productParams.price == "desc") {
 						param.sort = 'price_des'
@@ -658,6 +663,7 @@
 				}
 				if (this.productParams.max_price){
 					param.end_price = parseInt(this.productParams.max_price)
+					
 				}
 				if (this.productParams.min_price){
 					param.start_price = parseInt(this.productParams.min_price)

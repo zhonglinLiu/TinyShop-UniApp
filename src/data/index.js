@@ -4,8 +4,7 @@ var cate = [
 	{'cover':'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/img/taobao.png','id':'taobao','title':'淘宝榜单'},
 	{'cover':'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/img/duoduo.png','id':'pdd','title':'拼多多榜单'},
 	{'cover':'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/img/jd.png','id':'jd','title':'京东榜单'},
-	{'cover':'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/img/wph.png','id':'wph','title':'唯品会'},
-	{'cover':'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/img/ele.png','id':'ele','title':'饿了么外卖'}
+	{'cover':'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/img/wph.png','id':'wph','title':'唯品会'}
 ]
 var announce = [
 	{'cover':'url','id':1, 'title':'联系客服'},
@@ -14,14 +13,14 @@ var announce = [
 
 var banner_url = 'https://liu-web-static.oss-cn-shanghai.aliyuncs.com/image/banners/'
 var top = [
-	{'id':3,'cover':banner_url + 'duoduo-qianwanbutie.jpg',
-	'jump_type':'','jump_link':'https://p.pinduoduo.com/WjAFubZf', 'title':'千万补贴 百万爆款'},
-	{'id':4,'cover':banner_url + 'duoduo-huili.jpg',
-	'jump_type':'','jump_link':'https://p.pinduoduo.com/AgmFuWWC', 'title':'回力多多品牌日'},
-	{'id':1,'cover':banner_url + 'tiaomao618-banner.jpg',
-	'jump_type':'', 'jump_link':'https://s.click.taobao.com/VRMn3nu', 'title':'天猫618'},
-	{'id':2,'cover':banner_url + 'yiyuangou.jpg',
-	'jump_type':'','jump_link':'https://s.click.taobao.com/2uIk3nu', 'title':'限量一元购'}
+	{'id':3,'cover':banner_url + 'TB1iwoaSBr0gK0jSZFnXXbRRXXa-800-450.png',
+	'jump_type':'','jump_link':'https://s.click.taobao.com/LuXz4ju', 'title':'百亿补贴'},
+	{'id':4,'cover':banner_url + 'O1CN01AoYcNo1sJG5XnNqIO_!!6000000005745-0-xtenhyfx.jpg',
+	'jump_type':'','jump_link':'https://s.click.taobao.com/whBLwiu', 'title':'品牌快抢'},
+	{'id':1,'cover':banner_url + '1ce9e919fb9c2e12685c08e7848a792d.jpg',
+	'jump_type':'', 'jump_link':'https://p.pinduoduo.com/OK6aeTvD', 'title':'良品铺子超级品牌日'},
+	{'id':2,'cover':banner_url + '0cf02d3c49ebfafee1582b9150e6c2ff.jpg',
+	'jump_type':'','jump_link':'https://p.pinduoduo.com/4SxTYcs5', 'title':'拼多多万人团'}
 ]
 
 var search = {
@@ -81,7 +80,7 @@ var notice_map = {
         "title": "关于本站",
         "merchant_id": 0,
         "content": "<p>本站是一个聚合了淘宝、拼多多、唯品会、京东等购物平台优惠信息的网站。开发此站的目的是希望大家都能更省钱的买到更好的东西。</p></br>" +
-					"<p>2021年05月30日： 本站1.0版本正式上线，支持查询淘宝、拼多多优惠信息 。</p>" + 
+					"<p>2021年05月30日： 本站1.0版本正式上线，支持查询淘宝、拼多多优惠信息 。</p>" +
 					"<p>2021年06月03日： 增加14种主题色&修复若干bug。</p>" ,
         "cover": "",
         "synopsis": "今天消息是这样",

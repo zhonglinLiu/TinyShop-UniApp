@@ -25,6 +25,8 @@ export default {
 
 	// wxjssdk
 	async wxConfigH5(url) {
+		console.log('wxConfigH5 return')
+		return
 		if (this.isWechat()) {
 			const jsApiList = JSON.stringify([
 				'chooseWXPay',

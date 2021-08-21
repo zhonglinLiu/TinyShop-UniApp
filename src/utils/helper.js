@@ -503,5 +503,13 @@ export default {
 		host = conf.http_host
 		// #endif
 		return host
+	},
+	checkIosVersion() {
+		var str= navigator.userAgent.toLowerCase()
+		var ver=str.match(/cpu iphone os (.*?) like mac os/)
+		if(!ver){
+			return false
+		}
+		return ver[1].replace(/_/g,".")
 	}
 };

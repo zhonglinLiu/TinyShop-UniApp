@@ -344,6 +344,7 @@
 	import { collectCreate, collectDel, pickupPointIndex, transmitCreate } from '@/api/basic';
   import { couponReceive, addressList } from '@/api/userInfo';
 	import { mapMutations } from 'vuex';
+	import {checkIosVersion} from '@/utils/helper'
 
   export default {
     name: 'rfProductDetail',
@@ -777,7 +778,7 @@
 				});
 			},
 			crateTaoKouLing(event) {
-				this.loading = true;
+				uni.showLoading()
 				var url = this.product.coupon_share_url
 				var that = this;
 				this.$http
@@ -787,10 +788,17 @@
 						'logo': that.product.pict_url.replace('//', ''),
 					})
 					.then(async r => {
+						uni.hideLoading()
+						this.loading = false;
 						var data = r.data.tbk_tpwd_create_response.data
+						var version = checkIosVersion()
+						var text = data.model
+						if(version && parseFloat(version) >= 14) {
+							text = data.password_simple
+						}
 						// #ifndef H5
 						uni.setClipboardData({
-							data: data.model,
+							data: text,
 							success: function () {
 								uni.showToast({
 									icon: 'none', // success / none / loading 3个有效参数
@@ -804,22 +812,18 @@
 						})
 						// #endif
 						// #ifdef H5
-						this.$copyText(data.model).then(function(e) {
+						
+						this.$copyText(text).then(function(e) {
 							uni.showToast({
 								icon: 'none', // success / none / loading 3个有效参数
 								title: '复制成功,请打开淘宝购买',
-								duration: 2000
-							});
-						},function(e) {
-							uni.showToast({
-								icon: 'none', // success / none / loading 3个有效参数
-								title: '复制失败,请重试',
 								duration: 2000
 							});
 						})
 						// #endif
 					})
 					.catch(err => {
+						uni.hideLoading()
 						this.loading = false;
 						this.errorInfo = err;
 					});
