@@ -344,7 +344,7 @@
 	import { collectCreate, collectDel, pickupPointIndex, transmitCreate } from '@/api/basic';
   import { couponReceive, addressList } from '@/api/userInfo';
 	import { mapMutations } from 'vuex';
-	import {checkIosVersion} from '@/utils/helper'
+	import utils from '@/utils/util'
 
   export default {
     name: 'rfProductDetail',
@@ -791,7 +791,8 @@
 						uni.hideLoading()
 						this.loading = false;
 						var data = r.data.tbk_tpwd_create_response.data
-						var version = checkIosVersion()
+						var version = utils.CheckIosVersion()
+						console.log(version)
 						var text = data.model
 						if(version && parseFloat(version) >= 14) {
 							text = data.password_simple
@@ -812,7 +813,7 @@
 						})
 						// #endif
 						// #ifdef H5
-						
+
 						this.$copyText(text).then(function(e) {
 							uni.showToast({
 								icon: 'none', // success / none / loading 3个有效参数

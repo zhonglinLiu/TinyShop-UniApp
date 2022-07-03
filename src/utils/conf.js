@@ -244,11 +244,11 @@ var domain = 'https://mango.wehere.top'
 // var domain = 'http://127.0.0.1:9015'
 export default {
 	http_host : 'http://liu-web-static.oss-cn-shanghai.aliyuncs.com',
-	taobao_api:domain + '/taobaoke/openapi',
-  taobao_transfor: domain + '/taobaoke/transfor',
-	tkl_api: domain + '/taobaoke/tkl',
-	duo_api:domain + '/duoduo/query',
-	duo_cat_api:domain + '/duoduo/cate',
+	taobao_api:domain + '/api/taobaoke/openapi',
+  taobao_transfor: domain + '/api/taobaoke/transfor',
+	tkl_api: domain + '/api/taobaoke/tkl',
+	duo_api:domain + '/api/duoduo/query',
+	duo_cat_api:domain + '/api/duoduo/cate',
   page_size: 20,
 	taobaoCate: taobaoCate,
 	taobaoBrandCate:taobaoBrandCate,

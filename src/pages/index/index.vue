@@ -66,16 +66,6 @@
 						<text class="iconfont icongonggao" :class="'text-'+themeColor.name"></text>
 					</view>
 				</rf-swiper-slide>
-				<!-- 爆款推荐 -->
-				<!-- <view class="hot-recommend">
-					<view class="left">
-						<image class="hot-recommend-image" @tap="navTo(hotRecommendList[0].url)" :src="hotRecommendList[0].icon"></image>
-					</view>
-					<view class="right">
-						<image class="hot-recommend-image" @tap.stop="navTo(hotRecommendList[1].url)" :src="hotRecommendList[1].icon"></image>
-						<image class="hot-recommend-image" @tap.stop="navTo(hotRecommendList[2].url)" :src="hotRecommendList[2].icon"></image>
-					</view>
-				</view> -->
 				<!--新品上市-->
 				<rf-floor-index
 					icon="iconxinpin2"
@@ -101,6 +91,14 @@
 					@detail="navToDetailPage"
 					:banner="carouselList.index_new && carouselList.index_new[0]"
 				/>
+
+				<!--友情链接-->
+				<!--#ifdef H5-->
+				<view class="youqing" v-if="config.friend_link">
+					友情链接:
+					<a v-for="item in config.friend_link" :href="item.url">{{ item.text }}</a>
+				</view>
+				<!-- #endif -->
 
 				<!--网站备案号-->
 				<!--#ifdef H5-->
@@ -173,7 +171,14 @@
 				productCateList: [], // 商品栏目
 				config: {
 					'web_site_icp':'豫ICP备17025106号-2',
-					'copyright_desc':'Copyright 2021 hi.life@qq.com All rights reserved.'
+					'copyright_desc':'Copyright 2021 hi.life@qq.com All rights reserved.',
+					'friend_link': [
+						{'url':'https://mango.wehere.top/tools/', 'text':'在线工具箱'},
+						{'url':'https://mango.wehere.top/tools/screen_record', 'text':'屏幕录制'},
+						{'url':'https://mango.wehere.top/tools/markdown', 'text':'markdown编辑器'},
+						{'url':'https://app.wehere.top/periodic-table/index.html', 'text':'元素周期表'},
+						{'url':'https://mango.wehere.top/avator', 'text':'头像制作'}
+					]
 				}, // 商户配置
 				announceList: homeData.notice_list, // 公告列表
 				share: {},
@@ -281,6 +286,9 @@
 			this.getProductList(this.currentCate);
 		},
 		methods: {
+			track () {
+				this.$ga.page('/')
+			},
 			// 顶部tab点击
 			tabClick({ id }) {
 				this.currentCate = id;
@@ -773,6 +781,18 @@
 					margin-right: 20upx;
 					font-size: $font-lg + 16upx;
 				}
+			}
+		}
+		.youqing {
+			text-align: center;
+			a {
+				display: inline-block;
+				margin:10upx 10upx 0upx 10upx;
+				text-decoration: none;
+				color:#000;
+			}
+			a:hover {
+				text-decoration:underline;
 			}
 		}
 	}

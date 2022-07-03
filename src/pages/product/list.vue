@@ -466,7 +466,7 @@
 				}
 			},
 			closeDrawer() {
-				this.drawer = false;
+			  this.drawer = false;
 			  var params = {}
 			  if (this.maxPrice) {
 			    params.max_price = this.maxPrice;
@@ -563,6 +563,7 @@
 			},
 			// 获取商品列表
 			async getProductList(type) {
+				console.log(this.keyword)
 				if(this.keyword){
 					this.productParams.keyword = this.keyword;
 				}
@@ -585,6 +586,7 @@
 					param.cat_id = this.productParams.cate_id
 				}
 				if(this.productParams.keyword){
+					console.log('---------------------', this.productParams.keyword)
 					param.keyword = this.productParams.keyword
 				}
 				if(this.productParams.price){
@@ -663,7 +665,7 @@
 				}
 				if (this.productParams.max_price){
 					param.end_price = parseInt(this.productParams.max_price)
-					
+
 				}
 				if (this.productParams.min_price){
 					param.start_price = parseInt(this.productParams.min_price)

@@ -73,9 +73,19 @@ function GetPlatName(plat) {
 	return ''
 }
 
+function CheckIosVersion() {
+		var str= navigator.userAgent.toLowerCase()
+		var ver=str.match(/cpu iphone os (.*?) like mac os/)
+		if(!ver){
+			return false
+		}
+		return ver[1].replace(/_/g,".")
+	}
+
 export default {
   BaseRequest: BaseRequest,
   BaseGetRequest: BaseGetRequest,
   BaseDodoRequest: BaseDodoRequest,
 	GetPlatName: GetPlatName,
+	CheckIosVersion: CheckIosVersion,
 };

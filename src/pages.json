@@ -756,7 +756,7 @@
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "RF商城",
+		"navigationBarTitleText": "淘券APP",
 		"navigationBarBackgroundColor": "#FFFFFF",
 		"backgroundColor": "#f8f8f8"
 	},

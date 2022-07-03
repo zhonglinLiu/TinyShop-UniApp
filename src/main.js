@@ -27,6 +27,7 @@ import rfNavDetail from '@/components/rf-nav-detail';
 import cuCustom from '@/components/cu-custom';
 import rfBackHome from '@/components/rf-back-home';
 import VueClipboard from 'vue-clipboard2'
+import VueAnalytics from 'vue-analytics';
 Vue.use(VueClipboard)
 // 网络状态监听
 uni.getNetworkType({
@@ -131,6 +132,13 @@ Vue.prototype.singleSkuText = $mConstDataConfig.singleSkuText;
 // 保留小数点后两位
 Vue.filter('keepTwoDecimal', value => {
   return (Math.floor((value || 0) * 100) / 100).toFixed(2);
+});
+
+Vue.use(VueAnalytics, {
+  id: 'G-WKPJP9VB3F',
+	autoTracking: {
+	  screenview: true
+	}
 });
 
 const app = new Vue({
